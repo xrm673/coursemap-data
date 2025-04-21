@@ -84,7 +84,7 @@ def fetch_subjects_courses(
 
     return subjects, all_courses
 
-
+# TODO: add semester list to the subject data
 def upload_subjects(subjects: List[Dict[str, Any]], semester: str) -> None:
     """
     Process subject data and upload to Firestore.
