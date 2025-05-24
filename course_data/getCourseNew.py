@@ -154,7 +154,7 @@ def upload_courses(courses: List[Dict[str, Any]], semester: str) -> None:
         course_id = f"{course['subject']}{course['catalogNbr']}"
 
         # Check if the course already exists
-        existing_course_ref = db.collection("coursesNew").document(course_id)
+        existing_course_ref = db.collection("courses").document(course_id)
         existing_course_doc = existing_course_ref.get()
 
         if existing_course_doc.exists:
@@ -534,29 +534,41 @@ def get_sections(group: Dict[str, Any], semester: str) -> Dict[str, Any]:
             - sections: Array of section dictionaries with:
                 - tp: section type (LEC, LAB, DIS, IND, etc.)
                 - nbr: section number
-                - time: array of time strings
                 - open: optional status (C for closed, W for waitlist)
                 - mode: optional instruction mode
                 - location: optional location (only if not in Ithaca)
     """
     sections_data = {
         "semester": semester,
-        "sections": []
+        "secInfo": []
     }
     
     # Process each section in the group
     for section in group.get("classSections", []):
         section_info = {
-            "tp": section.get("ssrComponent", ""),
+            "type": section.get("ssrComponent", ""),
             "nbr": section.get("section", ""),
-            "time": []
+            "meetings": []
         }
         
         # Get time information from meetings
-        for meeting in section.get("meetings", []):
-            if meeting.get("pattern") and meeting.get("timeStart") and meeting.get("timeEnd"):
-                time_str = f"{meeting['pattern']} {meeting['timeStart']}-{meeting['timeEnd']}"
-                section_info["time"].append(time_str)
+        for i in range(len(section.get("meetings", []))):
+            meeting = section.get("meetings", [])[i]
+            meeting_data = {
+                "no": i + 1,
+                "stTm": meeting.get("timeStart"),
+                "edTm": meeting.get("timeEnd"),
+                "stDt": meeting.get("startDt"),
+                "edDt": meeting.get("endDt"),
+                "pt": meeting.get("pattern"),
+                "instructors": [instructor.get("netid") for instructor in meeting.get("instructors", [])]
+            }
+            
+            # Add topic if meetingTopicDescription exists
+            if meeting.get("meetingTopicDescription"):
+                meeting_data["topic"] = meeting.get("meetingTopicDescription")
+                
+            section_info["meetings"].append(meeting_data)
         
         # Add open status if not "O" (open)
         if section.get("openStatus") != "O":
@@ -570,7 +582,7 @@ def get_sections(group: Dict[str, Any], semester: str) -> Dict[str, Any]:
         if section.get("location") and section["location"] != "ITH":
             section_info["location"] = section["location"]
         
-        sections_data["sections"].append(section_info)
+        sections_data["secInfo"].append(section_info)
     
     return sections_data
 
@@ -704,7 +716,7 @@ def get_grp_prerequisites(notes: List[str]) -> Dict[str, str]:
 
 
 if __name__ == "__main__":
-    SEMESTERS = ["SP25", "WI25", "FA24", "SU24", "SP24"] # completed
+    SEMESTERS = ["FA25", "SU25", "SP25", "WI25", "FA24", "SU24", "SP24"] # completed
     for semester in SEMESTERS:
         subjects, courses = fetch_subjects_courses(semester)
         upload_subjects(subjects, semester)
