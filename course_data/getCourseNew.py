@@ -6,24 +6,17 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
 import json
-import sys
-import os
 import requests
 from typing import List, Dict, Any, Tuple
-import time
-
-# Add the root directory to the Python path
-root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sys.path.append(root_dir)
-
 from const import *
 
-# Import local modules
-from parseText import *
-
+# Initialize Firebase
 cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
+
+# Import local modules
+from parseText import *
 
 
 def fetch_subjects_courses(

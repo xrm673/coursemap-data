@@ -1,25 +1,19 @@
 import os
-import sys
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from const import SERVICE_ACCOUNT_PATH
+from service import get_course, get_courses_by_subject, get_courses_by_subject_level, \
+    get_courses_by_subject_min_level, get_CS_practicum
 
-current_dir = os.path.dirname(os.path.abspath(__file__))  # Location of major.py
-project_root = os.path.abspath(os.path.join(current_dir, "../../.."))  # Goes up to 'projects' directory
-keys_dir = os.path.join(project_root, "secret-keys")
-
-sys.path.append(os.path.join(project_root, "cu-explore/data"))
-from service import *
-
+# Initialize Firebase if not already initialized
 if not firebase_admin._apps:
-    key_path = os.path.join(keys_dir, "serviceAccountKey.json")
-    if not os.path.exists(key_path):
-        raise FileNotFoundError(f"Firebase key file not found at: {key_path}")
-    cred = credentials.Certificate(key_path)
+    if not os.path.exists(SERVICE_ACCOUNT_PATH):
+        raise FileNotFoundError(f"Firebase key file not found at: {SERVICE_ACCOUNT_PATH}")
+    cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-
 
 def add_major(major_data):
     major_ref = db.collection("majors").document(major_data["id"])

@@ -78,14 +78,4 @@ def get_CS_practicum(included=[]):
         if course_id[-1] == "1":
             course_ids.append(course_id)
     course_ids.extend(included)
-    return course_ids
-
-
-def main():
-    print(
-        get_courses_by_subject_min_level("ARTH", 3, excluded=["ARTH2000", "ARTH4101"])
-    )
-
-
-if __name__ == "__main__":
-    main()
+    return course_ids 
