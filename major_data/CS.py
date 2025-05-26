@@ -1,5 +1,5 @@
-from service import *
-from common import *
+from common import *  # This initializes Firebase
+from service import *  # This uses Firebase after initialization
 
 
 def commit_CS():
@@ -16,7 +16,7 @@ def commit_CS():
         "basicRequirements": [
             {
                 "college": "CAS",
-                "year": 2026,
+                "year": "2026",
                 "requirements": [
                     "CS_req1",
                     "CS_req2",
@@ -28,7 +28,7 @@ def commit_CS():
             },
             {
                 "college": "CAS",
-                "year": 2027,
+                "year": "2027",
                 "requirements": [
                     "CS_req1",
                     "CS_req2",
@@ -40,7 +40,7 @@ def commit_CS():
             },
             {
                 "college": "CAS",
-                "year": 2028,
+                "year": "2028",
                 "requirements": [
                     "CS_req1",
                     "CS_req2",
@@ -51,7 +51,7 @@ def commit_CS():
             },
             {
                 "college": "CAS",
-                "year": 2029,
+                "year": "2029",
                 "requirements": [
                     "CS_req1",
                     "CS_req2",
@@ -62,7 +62,7 @@ def commit_CS():
             },
             {
                 "college": "COE",
-                "year": 2026,
+                "year": "2026",
                 "requirements": [
                     "CS_req1",
                     "CS_req3",
@@ -74,7 +74,7 @@ def commit_CS():
             },
             {
                 "college": "COE",
-                "year": 2027,
+                "year": "2027",
                 "requirements": [
                     "CS_req1",
                     "CS_req3",
@@ -86,7 +86,7 @@ def commit_CS():
             },
             {
                 "college": "COE",
-                "year": 2028,
+                "year": "2028",
                 "requirements": [
                     "CS_req1",
                     "CS_req3",
@@ -97,7 +97,7 @@ def commit_CS():
             },
             {
                 "college": "COE",
-                "year": 2029,
+                "year": "2029",
                 "requirements": [
                     "CS_req1",
                     "CS_req3",
@@ -145,8 +145,8 @@ def commit_CS():
         "id": "CS_req2",
         "type": "C",
         "major": "CS",
-        "name": "Calculus",
-        "tag": "CS Calculus",
+        "name": "Math",
+        "tag": "CS Math",
         "tagDescr": "This is a calculus course of Computer Science major",
         "descr": [
             "Take a calculus sequence of 3 courses.",
@@ -167,8 +167,8 @@ def commit_CS():
         "id": "CS_req3",
         "type": "C",
         "major": "CS",
-        "name": "Calculus",
-        "tag": "CS Calculus",
+        "name": "Engineering Math",
+        "tag": "CS Math",
         "tagDescr": "This is a calculus course of Computer Science major",
         "descr": [
             "Take a calculus sequence of 3 courses.",
@@ -318,6 +318,15 @@ def commit_CS():
         "note": None,
     }
     add_requirement(req9)
+    
+def get_CS_practicum(included=[]):
+    course_ids = []
+    CS_4000 = get_courses_by_subject_level(subject="CS", level=4)
+    for course_id in CS_4000:
+        if course_id[-1] == "1":
+            course_ids.append(course_id)
+    course_ids.extend(included)
+    return course_ids 
 
 
 if __name__ == "__main__":

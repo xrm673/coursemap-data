@@ -28,4 +28,4 @@ ALL_SEMESTERS = [
     "WI22",
     "FA21",
     "SU21",
-]
+] 

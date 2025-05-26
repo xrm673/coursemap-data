@@ -1,6 +1,4 @@
-from firebase_admin import firestore
-
-db = firestore.client()
+from common import db
 
 def get_course(course_id):
     course_ref = db.collection("courses").document(course_id)
@@ -19,13 +17,19 @@ def get_courses_by_subject(subject, min_credit=0, excluded=[], included=[]):
         if doc.id in excluded:
             continue
         qualified = False
-        for credit in doc_data["creditsTotal"]:
-            if credit >= min_credit:
-                qualified = True
-                break
+        # Check credits in each enrollGroup
+        if "enrollGroups" in doc_data:
+            for group in doc_data["enrollGroups"]:
+                if "credits" in group:
+                    for credit in group["credits"]:
+                        if credit >= min_credit:
+                            qualified = True
+                            break
+                if qualified:
+                    break
         if qualified:
             course_ids.append(doc.id)
-        course_ids = course_ids + included
+    course_ids = course_ids + included
     return course_ids
 
 
@@ -47,10 +51,16 @@ def get_courses_by_subject_level(
             continue
         doc_data = doc.to_dict()
         qualified = False
-        for credit in doc_data["creditsTotal"]:
-            if credit >= min_credit:
-                qualified = True
-                break
+        # Check credits in each enrollGroup
+        if "enrollGroups" in doc_data:
+            for group in doc_data["enrollGroups"]:
+                if "credits" in group:
+                    for credit in group["credits"]:
+                        if credit >= min_credit:
+                            qualified = True
+                            break
+                if qualified:
+                    break
         if qualified:
             course_ids.append(doc.id)
     course_ids = course_ids + included
@@ -69,13 +79,3 @@ def get_courses_by_subject_min_level(
         if course_id not in course_ids:
             course_ids.append(course_id)
     return course_ids
-
-
-def get_CS_practicum(included=[]):
-    course_ids = []
-    CS_4000 = get_courses_by_subject_level(subject="CS", level=4)
-    for course_id in CS_4000:
-        if course_id[-1] == "1":
-            course_ids.append(course_id)
-    course_ids.extend(included)
-    return course_ids 
