@@ -6,6 +6,8 @@ def commit_PHYS():
     major = {
         "id": "PHYS",
         "name": "Physics",
+        "needsYear": False,
+        "needsCollege": False,
         "colleges": [{"id": "CAS", "name": "Arts and Sciences"}],
         "requiredCourses": None,
         "basicRequirements": [

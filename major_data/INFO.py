@@ -6,6 +6,8 @@ def commit_INFO():
     major = {
         "id": "INFO",
         "name": "Information Science",
+        "needsYear": False,
+        "needsCollege": False,
         "colleges": [
             {"id": "CAS", "name": "Arts and Sciences"},
             {"id": "CALS", "name": "Cornell CALS"},
