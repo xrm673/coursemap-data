@@ -9,7 +9,7 @@ import os
 import requests
 from typing import List, Dict, Any, Tuple
 from const import *
-from course_data.parse_text import *
+from parse_text import *
 import certifi  # Add this import
 
 load_dotenv()
@@ -26,8 +26,8 @@ def setup_indexes():
     Set up MongoDB indexes for better query performance.
     """
     # Courses indexes
-    courses_collection.create_index([("sbj", 1)])
-    courses_collection.create_index([("enrollGroups.grpIdentifier", 1)])
+    courses_collection.create_index([("ttl", 1)])  # Title index
+    courses_collection.create_index([("enrollGroups.grpIdentifier", 1)])  # Enrollment group index
     
     # Instructors index
     instructors_collection.create_index([("netid", 1)], unique=True)
@@ -142,6 +142,7 @@ def upload_courses(courses: List[Dict[str, Any]], semester: str, batch_size: int
         batch_size: Number of operations to batch together (default: 100)
     """
     bulk_operations = []
+    instructor_operations = []
     
     for course in courses:
         try:
@@ -159,7 +160,7 @@ def upload_courses(courses: List[Dict[str, Any]], semester: str, batch_size: int
                 # Add all enrollment groups
                 for enroll_group in course.get("enrollGroups", []):
                     identifier, has_topic = get_group_identifier(enroll_group)
-                    group_data = initialize_enroll_group(enroll_group, semester, identifier, has_topic)
+                    group_data = initialize_enroll_group(enroll_group, semester, identifier, has_topic, instructor_operations)
                     course_data["enrollGroups"].append(group_data)
                 
                 # Insert new course
@@ -177,7 +178,7 @@ def upload_courses(courses: List[Dict[str, Any]], semester: str, batch_size: int
                 # Process each enrollment group
                 for enroll_group in course.get("enrollGroups", []):
                     identifier, has_topic = get_group_identifier(enroll_group)
-                    group_data = initialize_enroll_group(enroll_group, semester, identifier, has_topic)
+                    group_data = initialize_enroll_group(enroll_group, semester, identifier, has_topic, instructor_operations)
                     
                     # Check if this group exists
                     group_exists = any(
@@ -217,10 +218,24 @@ def upload_courses(courses: List[Dict[str, Any]], semester: str, batch_size: int
                     bulk_operations.append(group_update)
             
             # Execute batch if we've reached batch_size
-            if len(bulk_operations) >= batch_size:
-                courses_collection.bulk_write(bulk_operations, ordered=False)
-                print(f"Processed batch of {len(bulk_operations)} operations")
-                bulk_operations = []
+            if len(bulk_operations) >= batch_size or len(instructor_operations) >= batch_size:
+                try:
+                    # First upload instructors
+                    if instructor_operations:
+                        instructors_collection.bulk_write(instructor_operations, ordered=False)
+                        print(f"Uploaded {len(instructor_operations)} instructor operations")
+                        instructor_operations = []
+                    
+                    # Then upload courses
+                    if bulk_operations:
+                        courses_collection.bulk_write(bulk_operations, ordered=False)
+                        print(f"Processed batch of {len(bulk_operations)} course operations")
+                        bulk_operations = []
+                except Exception as e:
+                    print(f"Error executing batch operations: {str(e)}")
+                    # Clear the failed batches and continue
+                    bulk_operations = []
+                    instructor_operations = []
                 
             print(f"Processed course {course_id} for {semester}")
                 
@@ -228,10 +243,15 @@ def upload_courses(courses: List[Dict[str, Any]], semester: str, batch_size: int
             print(f"Error processing course {course_id}: {str(e)}")
     
     # Process any remaining operations
-    if bulk_operations:
+    if instructor_operations or bulk_operations:
         try:
-            courses_collection.bulk_write(bulk_operations, ordered=False)
-            print(f"Processed final batch of {len(bulk_operations)} operations")
+            if instructor_operations:
+                instructors_collection.bulk_write(instructor_operations, ordered=False)
+                print(f"Uploaded final {len(instructor_operations)} instructor operations")
+            
+            if bulk_operations:
+                courses_collection.bulk_write(bulk_operations, ordered=False)
+                print(f"Processed final batch of {len(bulk_operations)} course operations")
         except Exception as e:
             print(f"Error processing final batch: {str(e)}")
 
@@ -308,7 +328,8 @@ def initialize_enroll_group(
     group: Dict[str, Any],
     semester: str,
     identifier: str,
-    has_topic: bool
+    has_topic: bool,
+    instructor_operations: List[UpdateOne] = None
 ) -> Dict[str, Any]:
     """
     Get the enroll group data.
@@ -322,7 +343,7 @@ def initialize_enroll_group(
     enroll_group["components"] = group["componentsRequired"]
     if group["componentsOptional"]:
         enroll_group["componentsOptional"] = group["componentsOptional"]
-    enroll_group["instructors"] = [{"semester": semester, "netids": get_instructors(group)}]
+    enroll_group["instructors"] = [{"semester": semester, "netids": get_instructors(group, instructor_operations)}]
     
     location_conflicts = get_location_conflicts(group)
     if location_conflicts:
@@ -461,12 +482,13 @@ def get_group_identifier(group: Dict[str, Any]) -> tuple[str, bool]:
     return "", False
 
 
-def get_instructors(group: Dict[str, Any]) -> List[str]:
+def get_instructors(group: Dict[str, Any], instructor_operations: List[UpdateOne] = None) -> List[str]:
     """
     Extract instructor netids from an enrollment group.
     
     Args:
         group: The enrollment group dictionary from the API
+        instructor_operations: List to collect instructor bulk operations
         
     Returns:
         List of unique instructor netids
@@ -479,30 +501,41 @@ def get_instructors(group: Dict[str, Any]) -> List[str]:
         for meeting in section.get("meetings", []):
             # Process each instructor in the meeting
             for instructor in meeting.get("instructors", []):
-                upload_instructor(instructor)
-                instructors.add(instructor.get("netid", ""))
+                netid = instructor.get("netid")
+                if netid:  # Only add non-empty netids
+                    if instructor_operations is not None:
+                        prepare_instructor_operation(instructor, instructor_operations)
+                    instructors.add(netid)
     return list(instructors)
 
-def upload_instructor(instructor: Dict[str, Any]) -> None:
+
+def prepare_instructor_operation(instructor: Dict[str, Any], instructor_operations: List[UpdateOne]) -> None:
     """
-    Upload an instructor to the instructors collection if they don't already exist.
+    Prepare a bulk operation for instructor upload.
     
     Args:
         instructor: Dictionary containing instructor data from the API
+        instructor_operations: List to collect instructor bulk operations
     """
     netid = instructor.get("netid")
-    if not netid:  # Skip if no netid
+    if not netid:
         return
         
-    # Check if instructor already exists
-    if not instructors_collection.find_one({"netid": netid}):
-        instructor_data = {
-            "netid": netid,
-            "lNm": instructor.get("lastName", ""),
-            "fNm": instructor.get("firstName", ""),
-            "mNm": instructor.get("middleName", "")
-        }
-        instructors_collection.insert_one(instructor_data)
+    instructor_data = {
+        "netid": netid,
+        "lNm": instructor.get("lastName", ""),
+        "fNm": instructor.get("firstName", ""),
+        "mNm": instructor.get("middleName", "")
+    }
+    
+    # Use upsert to handle both insert and update cases
+    instructor_operations.append(
+        UpdateOne(
+            {"netid": netid},
+            {"$set": instructor_data},
+            upsert=True
+        )
+    )
 
 
 def get_location_conflicts(group: Dict[str, Any]) -> bool:
@@ -588,7 +621,6 @@ def get_sections(group: Dict[str, Any], semester: str) -> Dict[str, Any]:
                 "stDt": meeting.get("startDt"),
                 "edDt": meeting.get("endDt"),
                 "pt": meeting.get("pattern"),
-                "instructors": [instructor.get("netid") for instructor in meeting.get("instructors", [])]
             }
             
             # Add topic if meetingTopicDescription exists
@@ -743,7 +775,7 @@ def get_grp_prerequisites(notes: List[str]) -> Dict[str, str]:
 
 
 if __name__ == "__main__":
-    SEMESTERS = ["SU25", "SP25", "WI25"]
+    SEMESTERS = ["FA24", "SU24", "SP24", "WI24"]
     for semester in SEMESTERS:
         subjects, courses = fetch_subjects_courses(semester)
         upload_subjects(subjects, semester)
