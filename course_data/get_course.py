@@ -3,20 +3,37 @@
 # if the course exists in the database,
 # update the course data
 
-import firebase_admin
-from firebase_admin import credentials, firestore
-import json
+from pymongo import MongoClient, UpdateOne, InsertOne
+from dotenv import load_dotenv
+import os
 import requests
 from typing import List, Dict, Any, Tuple
 from const import *
+from course_data.parse_text import *
+import certifi  # Add this import
 
-# Initialize Firebase
-cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
-firebase_admin.initialize_app(cred)
-db = firestore.client()
+load_dotenv()
+mongo_uri = os.getenv("MONGO_URI")
+client = MongoClient(mongo_uri, tlsCAFile=certifi.where())  # Add SSL certificate verification
+db = client["CourseMap"]
+courses_collection = db["courses"]
+subjects_collection = db["subjects"]
+instructors_collection = db["instructors"]
 
-# Import local modules
-from parseText import *
+
+def setup_indexes():
+    """
+    Set up MongoDB indexes for better query performance.
+    """
+    # Courses indexes
+    courses_collection.create_index([("sbj", 1)])
+    courses_collection.create_index([("enrollGroups.grpIdentifier", 1)])
+    
+    # Instructors index
+    instructors_collection.create_index([("netid", 1)], unique=True)
+
+# Call setup_indexes when module is imported
+setup_indexes()
 
 
 def fetch_subjects_courses(
@@ -60,8 +77,8 @@ def fetch_subjects_courses(
     # Step 2: Fetch courses for each subject
     all_courses = []
     for subject in subjects:
-        subject_code = subject["value"]
-        course_url = f"https://classes.cornell.edu/api/2.0/search/classes.json?roster={semester}&subject={subject_code}"
+        subject_id = subject["value"]
+        course_url = f"https://classes.cornell.edu/api/2.0/search/classes.json?roster={semester}&subject={subject_id}"
         course_response = requests.get(course_url)
 
         if (
@@ -70,145 +87,160 @@ def fetch_subjects_courses(
         ):
             courses = course_response.json()["data"]["classes"]
             all_courses.extend(courses)
-            print(f"Fetched {len(courses)} courses for {subject_code} in {semester}")
+            print(f"Fetched {len(courses)} courses for {subject_id} in {semester}")
 
     return subjects, all_courses
 
 
 def upload_subjects(subjects: List[Dict[str, Any]], semester: str) -> None:
     """
-    Process subject data and upload to Firestore.
+    Process subject data and upload to MongoDB.
     Only adds subjects that don't already exist.
 
     Args:
         subjects: List of subject data from the API
         semester: The semester code (e.g., "SP25")
     """
-    # Process subjects with proper names from the API
-    subject_batch = db.batch()
-    subject_count = 0
     subjects_added = 0
 
     for subject in subjects:
-        subject_code = subject["value"]
+        subject_id = subject["value"]
 
-        # Check if subject already exists
-        subject_ref = db.collection("subjects").document(subject_code)
-        subject_doc = subject_ref.get()
-        if subject_doc.exists:
-            # Subject exists, update the subject data
-            existing_data = subject_doc.to_dict()
-            semesters = existing_data.get("semesters", [])
-            if semester not in semesters:
-                semesters.append(semester)
-                subject_ref.update({"semesters": semesters})
+        # Check if subject exists
+        existing_subject = subjects_collection.find_one({"_id": subject_id})
+        
+        if existing_subject:
+            # Subject exists, update the semesters array if needed
+            if semester not in existing_subject.get("semesters", []):
+                subjects_collection.update_one(
+                    {"_id": subject_id},
+                    {"$addToSet": {"semesters": semester}}
+                )
         else:
             # Subject doesn't exist, add it
             subject_data = {
-                "code": subject_code,
+                "_id": subject_id,
                 "name": subject["descr"],
                 "formalName": subject["descrformal"],
-                "semesters": [semester],
+                "semesters": [semester]
             }
-
-            subject_batch.set(subject_ref, subject_data)
-            subject_count += 1
+            
+            subjects_collection.insert_one(subject_data)
             subjects_added += 1
-
-            # Commit in smaller batches if needed
-            if subject_count >= 200:
-                subject_batch.commit()
-                subject_batch = db.batch()
-                subject_count = 0
-
-    # Commit any remaining subjects
-    if subject_count > 0:
-        subject_batch.commit()
 
     print(f"Added {subjects_added} new subjects for {semester}")
     
     
-def upload_courses(courses: List[Dict[str, Any]], semester: str) -> None:
+def upload_courses(courses: List[Dict[str, Any]], semester: str, batch_size: int = 100) -> None:
     """
-    Process course data and upload to Firestore with semester tracking.
+    Process course data and upload to MongoDB with semester tracking.
     Includes enrollment groups, sections, meetings, and instructors.
 
     Args:
         courses: List of course data from the API
         semester: The semester code (e.g., "SP25")
+        batch_size: Number of operations to batch together (default: 100)
     """
-    # Track batch operations to stay within Firestore limits
-    batch = db.batch()
-    batch_count = 0
-    MAX_BATCH_SIZE = 500  # Firestore limit
-
-    # Process and upload courses with semester tracking
+    bulk_operations = []
+    
     for course in courses:
-        course_id = f"{course['subject']}{course['catalogNbr']}"
-
-        # Check if the course already exists
-        existing_course_ref = db.collection("courses").document(course_id)
-        existing_course_doc = existing_course_ref.get()
-
-        if existing_course_doc.exists:
-            # Initialize update_data dictionary
-            update_data = {}
+        try:
+            course_id = f"{course['subject']}{course['catalogNbr']}"
             
-            # Course exists, update the course data
-            existing_data = existing_course_doc.to_dict()
-            update_data["smst"] = add_early_semester(existing_data, semester)
+            # Check if course exists to determine update strategy
+            existing_course = courses_collection.find_one({"_id": course_id})
+            
+            if not existing_course:
+                # New course - prepare complete course document
+                course_data = initialize_single_course(course, semester)
+                course_data["_id"] = course_id  # Use _id instead of id
+                course_data["enrollGroups"] = []
                 
-            for early_group in course.get("enrollGroups", []):
-                identifier, has_topic = get_group_identifier(early_group)
-                # Check if identifier is not in any dictionary's identifier field
-                if not any(existing_group.get("grpIdentifier") == identifier for existing_group in existing_data["enrollGroups"]):
-                    group_data = initialize_enroll_group(early_group, semester, identifier, has_topic)
-                    existing_data["enrollGroups"].append(group_data)
-                else:
-                    # a enroll group with the same identifier already exists
-                    # Find the existing group and its index
-                    for i, existing_group in enumerate(existing_data["enrollGroups"]):
-                        if existing_group.get("grpIdentifier") == identifier:
-                            # Update the existing group with early semester data
-                            updated_group = add_early_group_data(existing_group, early_group, semester)
-                            # Replace the original enroll group with the updated one
-                            existing_data["enrollGroups"][i] = updated_group
-                            break
+                # Add all enrollment groups
+                for enroll_group in course.get("enrollGroups", []):
+                    identifier, has_topic = get_group_identifier(enroll_group)
+                    group_data = initialize_enroll_group(enroll_group, semester, identifier, has_topic)
+                    course_data["enrollGroups"].append(group_data)
+                
+                # Insert new course
+                bulk_operations.append(
+                    InsertOne(course_data)
+                )
+            else:
+                # Existing course - update semester
+                semester_update = UpdateOne(
+                    {"_id": course_id},
+                    {"$addToSet": {"smst": semester}}
+                )
+                bulk_operations.append(semester_update)
+                
+                # Process each enrollment group
+                for enroll_group in course.get("enrollGroups", []):
+                    identifier, has_topic = get_group_identifier(enroll_group)
+                    group_data = initialize_enroll_group(enroll_group, semester, identifier, has_topic)
+                    
+                    # Check if this group exists
+                    group_exists = any(
+                        group.get("grpIdentifier") == identifier 
+                        for group in existing_course.get("enrollGroups", [])
+                    )
+                    
+                    if group_exists:
+                        # Update existing group
+                        group_update = UpdateOne(
+                            {
+                                "_id": course_id,
+                                "enrollGroups.grpIdentifier": identifier
+                            },
+                            {
+                                "$addToSet": {
+                                    "enrollGroups.$.grpSmst": semester
+                                },
+                                "$push": {
+                                    "enrollGroups.$.instructors": {
+                                        "semester": semester,
+                                        "netids": group_data["instructors"][0]["netids"]
+                                    },
+                                    "enrollGroups.$.sections": {
+                                        "$each": group_data["sections"]
+                                    }
+                                }
+                            }
+                        )
+                    else:
+                        # Add new group
+                        group_update = UpdateOne(
+                            {"_id": course_id},
+                            {"$push": {"enrollGroups": group_data}}
+                        )
+                    
+                    bulk_operations.append(group_update)
             
-            # Add enrollGroups to update_data since we know it's been modified
-            update_data["enrollGroups"] = existing_data["enrollGroups"]
-            batch.update(existing_course_ref, update_data)
-            batch_count += 1
-            
-        else:
-            # New course, create full document
-            course_data = initialize_single_course(course, semester)
-            course_data["enrollGroups"] = []
-            for enroll_group in course.get("enrollGroups", []):
-                identifier, has_topic = get_group_identifier(enroll_group)
-                group_data = initialize_enroll_group(enroll_group, semester, identifier, has_topic)
-                course_data["enrollGroups"].append(group_data)
-            batch.set(existing_course_ref, course_data)
-            batch_count += 1
-            
-        # Commit batch if we've reached the maximum size
-        if batch_count >= MAX_BATCH_SIZE:
-            batch.commit()
-            batch = db.batch()  # Start a new batch
-            batch_count = 0
-        
-        print(f"Processed {course_id} for {semester}")
-            
-    # Commit any remaining operations in the final batch
-    if batch_count > 0:
-        batch.commit()
+            # Execute batch if we've reached batch_size
+            if len(bulk_operations) >= batch_size:
+                courses_collection.bulk_write(bulk_operations, ordered=False)
+                print(f"Processed batch of {len(bulk_operations)} operations")
+                bulk_operations = []
+                
+            print(f"Processed course {course_id} for {semester}")
+                
+        except Exception as e:
+            print(f"Error processing course {course_id}: {str(e)}")
+    
+    # Process any remaining operations
+    if bulk_operations:
+        try:
+            courses_collection.bulk_write(bulk_operations, ordered=False)
+            print(f"Processed final batch of {len(bulk_operations)} operations")
+        except Exception as e:
+            print(f"Error processing final batch: {str(e)}")
 
 
 def initialize_single_course(course: Dict[str, Any], semester: str) -> Dict[str, Any]:
     single_course = {}
     course_id = course["subject"] + course["catalogNbr"]
 
-    single_course["id"] = course_id
+    single_course["_id"] = course_id  # Use _id instead of id
     single_course["sbj"] = course["subject"]
     single_course["nbr"] = course["catalogNbr"]
     single_course["lvl"] = int(course["catalogNbr"][0])
@@ -216,30 +248,40 @@ def initialize_single_course(course: Dict[str, Any], semester: str) -> Dict[str,
     single_course["ttl"] = course["titleLong"]
     single_course["tts"] = course["titleShort"]
     single_course["dsrpn"] = clean(course["description"])
-
+    
+    eligibility = {}
     req = clean(course["catalogPrereqCoreq"])
     cmts = clean(course["catalogComments"])
     if cmts:
         if has_recommend_preco(cmts):
             # comment that has recommended prerequisite info
-            single_course["rcmdReq"] = cmts
+            eligibility["rcmdReq"] = cmts
         elif has_preco(cmts) and not req:
             # comment that has prerequisite info
             req = cmts
         else:
             # regular comments that don't have any prerequisite info
-            single_course["cmts"] = cmts
+            eligibility["cmts"] = cmts
 
     if req:
-        single_course["req"] = req
+        eligibility["req"] = req
         preco_dict = parse_preco(req)
         if preco_dict["prereq"]:
-            single_course["prereq"] = json.dumps(preco_dict["prereq"])
+            eligibility["prereq"] = nested_list_to_dict_list(preco_dict["prereq"])
         if preco_dict["coreq"]:
-            single_course["coreq"] = json.dumps(preco_dict["coreq"])
+            eligibility["coreq"] = nested_list_to_dict_list(preco_dict["coreq"])
         if preco_dict["preco"]:
-            single_course["preco"] = json.dumps(preco_dict["preco"])
-        single_course["needNote"] = preco_dict["note"]
+            eligibility["preco"] = nested_list_to_dict_list(preco_dict["preco"])
+        eligibility["needNote"] = preco_dict["note"]
+        
+    if course["catalogLang"]:
+        eligibility["lanreq"] = clean(course["catalogLang"])
+    if course["catalogForbiddenOverlaps"]:
+        eligibility["ovlpText"] = clean(course["catalogForbiddenOverlaps"])
+        eligibility["ovlp"] = parse_overlap(course["catalogForbiddenOverlaps"])
+    if course["catalogPermission"]:
+        eligibility["pmsn"] = course["catalogPermission"]
+    single_course["eligibility"] = eligibility
 
     if course["catalogWhenOffered"]:
         single_course["when"] = parse_when_offered(course["catalogWhenOffered"])
@@ -249,17 +291,10 @@ def initialize_single_course(course: Dict[str, Any], semester: str) -> Dict[str,
         single_course["distr"] = parse_distr(course["catalogDistr"])
     if course["catalogAttribute"]:
         single_course["attr"] = parse_distr(course["catalogAttribute"])
-    if course["catalogLang"]:
-        single_course["lanreq"] = clean(course["catalogLang"])
-    if course["catalogForbiddenOverlaps"]:
-        single_course["ovlpText"] = clean(course["catalogForbiddenOverlaps"])
-        single_course["ovlp"] = parse_overlap(course["catalogForbiddenOverlaps"])
     if course["catalogFee"]:
         single_course["fee"] = clean(course["catalogFee"])
     if course["catalogSatisfiesReq"]:
         single_course["satisfies"] = clean(course["catalogSatisfiesReq"])
-    if course["catalogPermission"]:
-        single_course["pmsn"] = course["catalogPermission"]
     if course["catalogOutcomes"]:
         single_course["otcm"] = clean_list(course["catalogOutcomes"])
     if course["catalogCourseSubfield"]:
@@ -287,7 +322,7 @@ def initialize_enroll_group(
     enroll_group["components"] = group["componentsRequired"]
     if group["componentsOptional"]:
         enroll_group["componentsOptional"] = group["componentsOptional"]
-    enroll_group["instructors"] = {semester: get_instructors(group)}
+    enroll_group["instructors"] = [{"semester": semester, "netids": get_instructors(group)}]
     
     location_conflicts = get_location_conflicts(group)
     if location_conflicts:
@@ -300,7 +335,7 @@ def initialize_enroll_group(
     if group["sessionCode"] != "1":
         enroll_group["session"] = group["sessionCode"]
         
-    enroll_group["sections"] = [get_sections(group, semester)]
+    enroll_group["sections"] = get_sections(group, semester)
     
     combined_groups = get_combined_groups(group)
     if combined_groups:
@@ -373,13 +408,17 @@ def add_early_group_data(
     # 2. Add instructors for the early semester
     if "instructors" not in updated_group:
         updated_group["instructors"] = {}
-    updated_group["instructors"][semester] = get_instructors(early_semester_group_data)
+    updated_group["instructors"].append({
+        "semester": semester, 
+        "netids" : get_instructors(early_semester_group_data)
+    })
     
     # 3. Add sections for the early semester
     if semester in CURRENT_YEAR:
-        if "sections" not in updated_group:
+        sections = get_sections(early_semester_group_data, semester)
+        if not updated_group.get("sections"):
             updated_group["sections"] = []
-        updated_group["sections"].append(get_sections(early_semester_group_data, semester))
+        updated_group["sections"].extend(sections)
     
     return updated_group
 
@@ -422,18 +461,17 @@ def get_group_identifier(group: Dict[str, Any]) -> tuple[str, bool]:
     return "", False
 
 
-def get_instructors(group: Dict[str, Any]) -> List[Dict[str, Any]]:
+def get_instructors(group: Dict[str, Any]) -> List[str]:
     """
-    Extract instructor information from an enrollment group.
+    Extract instructor netids from an enrollment group.
     
     Args:
         group: The enrollment group dictionary from the API
         
     Returns:
-        List of instructor dictionaries with netid and name
+        List of unique instructor netids
     """
-    instructors = []
-    seen_netids = set()  # To avoid duplicates
+    instructors = set()
     
     # Iterate through all sections in the group
     for section in group.get("classSections", []):
@@ -441,32 +479,30 @@ def get_instructors(group: Dict[str, Any]) -> List[Dict[str, Any]]:
         for meeting in section.get("meetings", []):
             # Process each instructor in the meeting
             for instructor in meeting.get("instructors", []):
-                netid = instructor.get("netid", "")
-                if not netid or netid in seen_netids:
-                    continue
-                    
-                # Build full name
-                first_name = instructor.get("firstName", "")
-                middle_name = instructor.get("middleName", "")
-                last_name = instructor.get("lastName", "")
-                
-                # Combine name parts, filtering out empty strings
-                name_parts = [first_name]
-                if middle_name:
-                    name_parts.append(middle_name)
-                name_parts.append(last_name)
-                full_name = " ".join(filter(None, name_parts))
-                
-                # Add instructor to list
-                instructors.append({
-                    "netid": netid,
-                    "name": full_name
-                    # rmp and rmpid will be added later if available
-                })
-                
-                seen_netids.add(netid)
+                upload_instructor(instructor)
+                instructors.add(instructor.get("netid", ""))
+    return list(instructors)
+
+def upload_instructor(instructor: Dict[str, Any]) -> None:
+    """
+    Upload an instructor to the instructors collection if they don't already exist.
     
-    return instructors
+    Args:
+        instructor: Dictionary containing instructor data from the API
+    """
+    netid = instructor.get("netid")
+    if not netid:  # Skip if no netid
+        return
+        
+    # Check if instructor already exists
+    if not instructors_collection.find_one({"netid": netid}):
+        instructor_data = {
+            "netid": netid,
+            "lNm": instructor.get("lastName", ""),
+            "fNm": instructor.get("firstName", ""),
+            "mNm": instructor.get("middleName", "")
+        }
+        instructors_collection.insert_one(instructor_data)
 
 
 def get_location_conflicts(group: Dict[str, Any]) -> bool:
@@ -531,14 +567,12 @@ def get_sections(group: Dict[str, Any], semester: str) -> Dict[str, Any]:
                 - mode: optional instruction mode
                 - location: optional location (only if not in Ithaca)
     """
-    sections_data = {
-        "semester": semester,
-        "secInfo": []
-    }
+    result = []
     
     # Process each section in the group
     for section in group.get("classSections", []):
-        section_info = {
+        section_data = {
+            "semester": semester,
             "type": section.get("ssrComponent", ""),
             "nbr": section.get("section", ""),
             "meetings": []
@@ -561,23 +595,23 @@ def get_sections(group: Dict[str, Any], semester: str) -> Dict[str, Any]:
             if meeting.get("meetingTopicDescription"):
                 meeting_data["topic"] = meeting.get("meetingTopicDescription")
                 
-            section_info["meetings"].append(meeting_data)
+            section_data["meetings"].append(meeting_data)
         
         # Add open status if not "O" (open)
         if section.get("openStatus") != "O":
-            section_info["open"] = section["openStatus"]
+            section_data["open"] = section["openStatus"]
         
         # Add instruction mode if not "P" (in-person)
         if section.get("instructionMode") != "P":
-            section_info["mode"] = section["instructionMode"]
+            section_data["mode"] = section["instructionMode"]
         
         # Add location if not in Ithaca
         if section.get("location") and section["location"] != "ITH":
-            section_info["location"] = section["location"]
+            section_data["location"] = section["location"]
         
-        sections_data["secInfo"].append(section_info)
+        result.append(section_data)
     
-    return sections_data
+    return result
 
 
 def get_combined_groups(group: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -697,11 +731,11 @@ def get_grp_prerequisites(notes: List[str]) -> Dict[str, str]:
         if has_preco(note):
             preco_dict = parse_preco(note)
             if preco_dict["prereq"]:
-                result["prereq"] = json.dumps(preco_dict["prereq"])
+                result["prereq"] = nested_list_to_dict_list(preco_dict["prereq"])
             if preco_dict["coreq"]:
-                result["coreq"] = json.dumps(preco_dict["coreq"])
+                result["coreq"] = nested_list_to_dict_list(preco_dict["coreq"])
             if preco_dict["preco"]:
-                result["preco"] = json.dumps(preco_dict["preco"])
+                result["preco"] = nested_list_to_dict_list(preco_dict["preco"])
             result["needNote"] = preco_dict["note"]
             break  # Stop after finding the first note with prerequisite information
             
@@ -709,7 +743,7 @@ def get_grp_prerequisites(notes: List[str]) -> Dict[str, str]:
 
 
 if __name__ == "__main__":
-    SEMESTERS = ["FA25", "SU25", "SP25", "WI25", "FA24", "SU24", "SP24"] # completed
+    SEMESTERS = ["SU25", "SP25", "WI25"]
     for semester in SEMESTERS:
         subjects, courses = fetch_subjects_courses(semester)
         upload_subjects(subjects, semester)

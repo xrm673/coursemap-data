@@ -10,7 +10,7 @@ sys.path.append(root_dir)
 
 # Now we can import from both the root and the course_data directory
 from const import *
-from course_data.getCourseNew import (
+from course_data.get_course import (
     get_instructors,
     get_group_identifier
 )

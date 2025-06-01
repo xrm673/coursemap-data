@@ -294,6 +294,14 @@ def remove_repeat(nested_list):
 
     return result
 
+def nested_list_to_dict_list(nested_list):
+    result = []
+    dict_in_list = {}
+    for sublist in nested_list:
+        dict_in_list["courses"] = sublist
+        result.append(dict_in_list)
+    return result
+
 
 def parse_overlap(text):
     text = clean(text)
