@@ -5,12 +5,12 @@
 
 from pymongo import MongoClient, UpdateOne, InsertOne
 from dotenv import load_dotenv
+import certifi
 import os
 import requests
 from typing import List, Dict, Any, Tuple
 from const import *
 from parse_text import *
-import certifi  # Add this import
 
 load_dotenv()
 mongo_uri = os.getenv("MONGO_URI")
@@ -27,6 +27,7 @@ def setup_indexes():
     """
     # Courses indexes
     courses_collection.create_index([("ttl", 1)])  # Title index
+    courses_collection.create_index([("distr", 1)])  # Distribution index
     courses_collection.create_index([("enrollGroups.grpIdentifier", 1)])  # Enrollment group index
     
     # Instructors index
@@ -268,6 +269,10 @@ def initialize_single_course(course: Dict[str, Any], semester: str) -> Dict[str,
     single_course["ttl"] = course["titleLong"]
     single_course["tts"] = course["titleShort"]
     single_course["dsrpn"] = clean(course["description"])
+    if course["catalogDistr"]:
+        single_course["distr"] = parse_distr(course["catalogDistr"])
+    if course["catalogOutcomes"]:
+        single_course["otcm"] = clean_list(course["catalogOutcomes"])
     
     eligibility = {}
     req = clean(course["catalogPrereqCoreq"])
@@ -282,7 +287,6 @@ def initialize_single_course(course: Dict[str, Any], semester: str) -> Dict[str,
         else:
             # regular comments that don't have any prerequisite info
             eligibility["cmts"] = cmts
-
     if req:
         eligibility["req"] = req
         preco_dict = parse_preco(req)
@@ -293,7 +297,6 @@ def initialize_single_course(course: Dict[str, Any], semester: str) -> Dict[str,
         if preco_dict["preco"]:
             eligibility["preco"] = nested_list_to_dict_list(preco_dict["preco"])
         eligibility["needNote"] = preco_dict["note"]
-        
     if course["catalogLang"]:
         eligibility["lanreq"] = clean(course["catalogLang"])
     if course["catalogForbiddenOverlaps"]:
@@ -303,24 +306,22 @@ def initialize_single_course(course: Dict[str, Any], semester: str) -> Dict[str,
         eligibility["pmsn"] = course["catalogPermission"]
     single_course["eligibility"] = eligibility
 
+    metadata = {}
     if course["catalogWhenOffered"]:
-        single_course["when"] = parse_when_offered(course["catalogWhenOffered"])
+        metadata["when"] = parse_when_offered(course["catalogWhenOffered"])
     if course["catalogBreadth"]:
-        single_course["breadth"] = course["catalogBreadth"]
-    if course["catalogDistr"]:
-        single_course["distr"] = parse_distr(course["catalogDistr"])
+        metadata["breadth"] = course["catalogBreadth"]
     if course["catalogAttribute"]:
-        single_course["attr"] = parse_distr(course["catalogAttribute"])
+        metadata["attr"] = parse_distr(course["catalogAttribute"])
     if course["catalogFee"]:
-        single_course["fee"] = clean(course["catalogFee"])
+        metadata["fee"] = clean(course["catalogFee"])
     if course["catalogSatisfiesReq"]:
-        single_course["satisfies"] = clean(course["catalogSatisfiesReq"])
-    if course["catalogOutcomes"]:
-        single_course["otcm"] = clean_list(course["catalogOutcomes"])
+        metadata["satisfies"] = clean(course["catalogSatisfiesReq"])
     if course["catalogCourseSubfield"]:
-        single_course["subfield"] = clean(course["catalogCourseSubfield"])
-    single_course["career"] = course["acadCareer"]
-    single_course["acadgrp"] = course["acadGroup"]
+        metadata["subfield"] = clean(course["catalogCourseSubfield"])
+    metadata["career"] = course["acadCareer"]
+    metadata["acadgrp"] = course["acadGroup"]
+    single_course["metadata"] = metadata
     return single_course
 
 
@@ -615,7 +616,6 @@ def get_sections(group: Dict[str, Any], semester: str) -> Dict[str, Any]:
         for i in range(len(section.get("meetings", []))):
             meeting = section.get("meetings", [])[i]
             meeting_data = {
-                "no": i + 1,
                 "stTm": meeting.get("timeStart"),
                 "edTm": meeting.get("timeEnd"),
                 "stDt": meeting.get("startDt"),
@@ -775,7 +775,7 @@ def get_grp_prerequisites(notes: List[str]) -> Dict[str, str]:
 
 
 if __name__ == "__main__":
-    SEMESTERS = ["FA24", "SU24", "SP24", "WI24"]
+    SEMESTERS = ["FA25", "SU25", "SP25", "WI25"]
     for semester in SEMESTERS:
         subjects, courses = fetch_subjects_courses(semester)
         upload_subjects(subjects, semester)
