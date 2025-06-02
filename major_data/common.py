@@ -1,25 +1,25 @@
+from pymongo import MongoClient
+from dotenv import load_dotenv
+import certifi
 import os
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
-from const import SERVICE_ACCOUNT_PATH
 
-# Initialize Firebase if not already initialized
-if not firebase_admin._apps:
-    if not os.path.exists(SERVICE_ACCOUNT_PATH):
-        raise FileNotFoundError(f"Firebase key file not found at: {SERVICE_ACCOUNT_PATH}")
-    cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
-    firebase_admin.initialize_app(cred)
+load_dotenv()
+mongo_uri = os.getenv("MONGO_URI")
+client = MongoClient(mongo_uri, tlsCAFile=certifi.where())  # Add SSL certificate verification
+db = client["CourseMap"]
+majors_collection = db["majors"]
+requirements_collection = db["requirements"]
+courses_collection = db["courses"]
 
-db = firestore.client()
+# Set up indexes
+majors_collection.create_index([("name", 1)])
+majors_collection.create_index([("colleges._id", 1)])
 
 def add_major(major_data):
-    major_ref = db.collection("majors").document(major_data["id"])
-    major_ref.set(major_data)
-    print(f"Added major: {major_data['id']}")
+    majors_collection.replace_one({"_id": major_data["_id"]}, major_data, upsert=True)
+    print(f"Added/Updated major: {major_data['_id']}")
 
 
 def add_requirement(req_data):
-    req_ref = db.collection("requirements").document(req_data["id"])
-    req_ref.set(req_data)
-    print(f"Added requirement: {req_data['id']}") 
+    requirements_collection.replace_one({"_id": req_data["_id"]}, req_data, upsert=True)
+    print(f"Added/Updated requirement: {req_data['_id']}") 
