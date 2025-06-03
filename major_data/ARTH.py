@@ -34,7 +34,7 @@ def commit_ARTH():
     req1 = {
         "_id": "arth1",
         "type": "C",
-        "major": "ARTH",
+        "majorId": "ARTH",
         "name": "Core",
         "tag": "ARTH Core",
         "tagDescr": "This is a core course of Art History major",
@@ -44,12 +44,13 @@ def commit_ARTH():
             "If students have not taken ARTH 1100 by the spring of sophomore year, they must complete a 4000-level tutorial course and receive a grade of B or higher in order to qualify for the major.",
             "A grade of B- or higher is required of all other courses to receive credit toward the major.",
         ],
-        "number": 3,
+        "numberOfRequiredCourses": 3,
         "courseGrps": [
-            {"courseIds": ["ARTH1100"]},
-            {"courseIds": ["ARTH2000"]},
-            {"courseIds": ["ARTH4101"]},
+            {"_id": 1, "courseIds": ["ARTH1100"]},
+            {"_id": 2, "courseIds": ["ARTH2000"]},
+            {"_id": 3, "courseIds": ["ARTH4101"]},
         ],
+        "overlap": ["arth2", "arth3", "arth4", "arth5"],
     }
     add_requirement(req1)
 
@@ -57,13 +58,14 @@ def commit_ARTH():
     req2 = {
         "_id": "arth2",
         "type": "E",
-        "major": "ARTH",
+        "majorId": "ARTH",
         "name": "2000-level",
         "tag": "2000 ARTH",
         "tagDescr": "This is a 2000 level Art History course.",
         "descr": ["Take at least one ARTH course at the 2000-level."],
-        "number": 1,
+        "numberOfRequiredCourses": 1,
         "courseIds": req2_courses,
+        "overlap": ["arth1", "arth3", "arth4", "arth5"],
     }
     add_requirement(req2)
 
@@ -71,13 +73,14 @@ def commit_ARTH():
     req3 = {
         "_id": "arth3",
         "type": "E",
-        "major": "ARTH",
+        "majorId": "ARTH",
         "name": "3000-level",
         "tag": "3000 ARTH",
         "tagDescr": "This is a 3000 level Art History course.",
         "descr": ["Take at least one ARTH course at the 3000-level."],
-        "number": 1,
+        "numberOfRequiredCourses": 1,
         "courseIds": req3_courses,
+        "overlap": ["arth1", "arth2", "arth4", "arth5"],
     }
     add_requirement(req3)
 
@@ -85,13 +88,14 @@ def commit_ARTH():
     req4 = {
         "_id": "arth4",
         "type": "E",
-        "major": "ARTH",
+        "majorId": "ARTH",
         "name": "4000-level",
         "tag": "4000 ARTH",
         "tagDescr": "This is a 4000 level Art History course.",
         "descr": ["Take at least one ARTH course at the 4000-level."],
-        "number": 2,
+        "numberOfRequiredCourses": 2,
         "courseIds": req4_courses,
+        "overlap": ["arth1", "arth2", "arth3", "arth5"],
     }
     add_requirement(req4)
 
@@ -101,13 +105,14 @@ def commit_ARTH():
     req5 = {
         "_id": "arth5",
         "type": "E",
-        "major": "ARTH",
+        "majorId": "ARTH",
         "name": "Electives",
         "tag": "ARTH Electives",
         "tagDescr": "This can be counted as an elective for Art History major.",
         "descr": ["Take three additional ARTH electives at the 3000-level or higher."],
-        "number": 3,
+        "numberOfRequiredCourses": 3,
         "courseIds": req5_courses,
+        "overlap": ["arth1", "arth2", "arth3", "arth4"],
     }
     add_requirement(req5)
 

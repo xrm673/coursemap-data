@@ -4,79 +4,60 @@ from common import *
 
 def commit_INFO():
     major = {
-        "id": "INFO",
+        "_id": "INFO",
         "name": "Information Science",
         "needsYear": False,
         "needsCollege": False,
         "colleges": [
-            {"id": "CAS", "name": "Arts and Sciences"},
-            {"id": "CALS", "name": "Cornell CALS"},
+            {"collegeId": "CAS", "name": "College of Arts and Sciences"},
+            {"collegeId": "CALS", "name": "College of Agriculture and Life Sciences"},
         ],
-        "requiredCourses": 15,
-        "basicRequirements": [
+        "numberOfRequiredCourses": 15,
+        "rawBasicRequirements": [
             {
-                "requirements": [
-                    "INFO_req1",
-                    "INFO_req2",
-                    "INFO_req3",
-                    "INFO_req4",
-                ],
+                "requirements": ["info1", "info2", "info3", "info4"],
             },
         ],
         "concentrations": [
             {
-                "concentration": "Behavioral Science",
-                "requirements": ["INFO_req6", "INFO_req7", "INFO_req8"],
+                "concentrationName": "Behavioral Science",
+                "requirements": ["info6", "info7", "info8"],
             },
             {
-                "concentration": "Data Science",
-                "requirements": [
-                    "INFO_req11",
-                    "INFO_req12",
-                    "INFO_req13",
-                    "INFO_req14",
-                ],
+                "concentrationName": "Data Science",
+                "requirements": ["info9", "info10", "info11", "info12"],
             },
             {
-                "concentration": "Digital Culture and Production",
-                "requirements": ["INFO_req15", "INFO_req16", "INFO_req17"],
+                "concentrationName": "Digital Culture and Production (Design Focused)",
+                "requirements": ["info13", "info14", "info15"],
             },
             {
-                "concentration": "Information Ethics, Law, and Policy",
-                "requirements": [
-                    "INFO_req18",
-                    "INFO_req19",
-                    "INFO_req20",
-                    "INFO_req21",
-                ],
+                "concentrationName": "Digital Culture and Production (Culture Focused)",
+                "requirements": ["info16", "info17"],
             },
             {
-                "concentration": "Interactive Technology",
-                "requirements": [
-                    "INFO_req22",
-                    "INFO_req23",
-                    "INFO_req24",
-                    "INFO_req25",
-                ],
+                "concentrationName": "Information Ethics, Law, and Policy",
+                "requirements": ["info18", "info19", "info20", "info21"],
             },
             {
-                "concentration": "UX Design",
-                "requirements": [
-                    "INFO_req26",
-                    "INFO_req27",
-                    "INFO_req28",
-                    "INFO_req29",
-                ],
+                "concentrationName": "Interactive Technology",
+                "requirements": ["info22", "info23", "info24", "info25"],
+            },
+            {
+                "concentrationName": "Networks, Crowds, and Markets",
+                "requirements": ["info26", "info27", "info28"],
+            },
+            {
+                "concentrationName": "UX Design",
+                "requirements": ["info29", "info30", "info31", "info32"],
             },
         ],
-        "endRequirements" : [
+        "rawEndRequirements" : [
             {
-                "requirements": [
-                    "INFO_req5",
-                ],
+                "requirements": ["info5"],
             },
         ],
-        "init": [
+        "onboardingCourses": [
             "INFO1200",
             "INFO1260",
             "INFO1300",
@@ -92,71 +73,88 @@ def commit_INFO():
     add_major(major)
 
     req1 = {
-        "id": "INFO_req1",
+        "_id": "info1",
         "type": "C",
-        "major": "INFO",
-        "name": "Core Courses",
+        "majorId": "INFO",
+        "name": "Core",
         "tag": "INFO Core",
         "tagDescr": "This is a core course of Information Science major",
         "descr": [
             "Information Science students must take at lease one course from each of the course group listed below.",
         ],
-        "number": 5,
+        "numberOfRequiredCourses": 5,
         "courseGrps": [
-            {"id": 1, "courses": ["INFO1200", "INFO1260"]},
-            {"id": 2, "courses": ["INFO1300"]},
-            {"id": 3, "courses": ["INFO2040"]},
-            {"id": 4, "courses": ["INFO2450"]},
-            {"id": 5, "courses": ["INFO2950", "INFO2951"]},
+            {"_id": 1, "courseIds": ["INFO1200", "INFO1260"]},
+            {"_id": 2, "courseIds": ["INFO1300"]},
+            {"_id": 3, "courseIds": ["INFO2040"]},
+            {"_id": 4, "courseIds": ["INFO2450"]},
+            {"_id": 5, "courseIds": ["INFO2950", "INFO2951"]},
         ],
+        "overlap": ["info2", "info3", "info4", "info5", "info6", "info7",
+                    "info8", "info9", "info10", "info11", "info12", "info13",
+                    "info14", "info15", "info16", "info17", "info18", "info19",
+                    "info20", "info21", "info22", "info23", "info24", "info25",
+                    "info26", "info27", "info28", "info29", "info30", "info31", "info32"],
         "note": "Data Science (DS) concentrators should take INFO 2950 during the fall semester, if possible. Otherwise, DS concentrators should plan to build upon their Python programming skills in preparation for upper-level DS courses.",
     }
     add_requirement(req1)
 
     req2 = {
-        "id": "INFO_req2",
-        "type": "C",
-        "major": "INFO",
-        "name": "Programming Requirement",
+        "_id": "info2",
+        "type": "E",
+        "majorId": "INFO",
+        "name": "Programming",
         "tag": "INFO Programming",
         "tagDescr": "This can be counted as a programming course for Information Science major",
         "descr": [
             "Take CS 1110 or CS 1112 for letter grade to fulfill the programming requirement."
         ],
-        "number": 1,
-        "courseGrps": [{"id": 1, "courses": ["CS1110", "CS1112"]}],
+        "numberOfRequiredCourses": 1,
+        "courseIds": ["CS1110", "CS1112"],
+        "overlap": ["info1", "info3", "info4", "info5", "info6", "info7",
+                    "info8", "info9", "info10", "info11", "info12", "info13",
+                    "info14", "info15", "info16", "info17", "info18", "info19",
+                    "info20", "info21", "info22", "info23", "info24", "info25",
+                    "info26", "info27", "info28", "info29", "info30", "info31", "info32"],
+        "note": None,
     }
     add_requirement(req2)
 
     req3 = {
-        "id": "INFO_req3",
+        "_id": "info3",
         "type": "E",
-        "major": "INFO",
-        "name": "Math Requirement",
+        "majorId": "INFO",
+        "name": "Math",
         "tag": "INFO Math",
         "tagDescr": "This can be counted as a math course for Information Science major",
         "descr": [
             "Take a Calculus I course (MATH 1106, MATH 1110, or MATH 1910) for letter grade to fulfill the math requirement. ",
             "AP credits can fulfill this requirement.",
         ],
-        "number": 1,
-        "courses": ["MATH1106", "MATH1110", "MATH1910"],
+        "numberOfRequiredCourses": 1,
+        "courseIds": ["MATH1106", "MATH1110", "MATH1910"],
+        "overlap": ["info1", "info2", "info4", "info5", "info6", "info7",
+                    "info8", "info9", "info10", "info11", "info12", "info13",
+                    "info14", "info15", "info16", "info17", "info18", "info19",
+                    "info20", "info21", "info22", "info23", "info24", "info25",
+                    "info26", "info27", "info28", "info29", "info30", "info31", "info32"],
+        "note": None,
     }
     add_requirement(req3)
 
     req4 = {
-        "id": "INFO_req4",
+        "_id": "info4",
         "type": "E",
-        "major": "INFO",
-        "name": "Statistics Requirement",
+        "majorId": "INFO",
+        "name": "Statistics",
         "tag": "INFO Stats",
         "tagDescr": "This can be counted as a statistic course for Information Science major",
         "descr": [
             "Take one of the statistics courses provided below. ",
             "AP credits may NOT be used to fulfill this requirement.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "AEM2100",
             "BTRY3010",
             "CEE3040",
@@ -172,6 +170,11 @@ def commit_INFO():
             "STSCI2150",
             "STSCI2200",
         ],
+        "overlap": ["info1", "info2", "info3", "info5", "info6", "info7",
+                    "info8", "info9", "info10", "info11", "info12", "info13",
+                    "info14", "info15", "info16", "info17", "info18", "info19",
+                    "info20", "info21", "info22", "info23", "info24", "info25",
+                    "info26", "info27", "info28", "info29", "info30", "info31", "info32"],
     }
     add_requirement(req4)
 
@@ -182,9 +185,9 @@ def commit_INFO():
         included=["INFO2300", "INFO2310", "CS2110", "CS2112", "CS3110", "CS3410"],
     )
     req5 = {
-        "id": "INFO_req5",
+        "_id": "info5",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Electives",
         "tag": "INFO Electives",
         "tagDescr": "This can be counted as an elective for Information Science major",
@@ -198,21 +201,26 @@ def commit_INFO():
             "courses taken abroad).",
             "Students may only fulfill one of their electives with INFO 4900.",
         ],
-        "number": 3,
-        "courses": req5_courses,
+        "numberOfRequiredCourses": 3,
+        "courseIds": req5_courses,
+        "overlap": ["info1", "info2", "info3", "info4", "info6", "info7",
+                    "info8", "info9", "info10", "info11", "info12", "info13",
+                    "info14", "info15", "info16", "info17", "info18", "info19",
+                    "info20", "info21", "info22", "info23", "info24", "info25",
+                    "info26", "info27", "info28", "info29", "info30", "info31", "info32"],
     }
     add_requirement(req5)
 
     req6 = {
-        "id": "INFO_req6",
+        "_id": "info6",
         "type": "E",
-        "major": "INFO",
-        "name": "Understanding Social Behavior",
+        "majorId": "INFO",
+        "name": "Social Behavior",
         "tag": "Social Behavior",
         "tagDescr": "This can be counted as a Social Behavior course for the Behavioral Science concentration in Information Science major.",
         "descr": ["Take two of the courses listed below."],
-        "number": 2,
-        "courses": [
+        "numberOfRequiredCourses": 2,
+        "courseIds": [
             "INFO3460",
             "INFO4430",
             "INFO4450",
@@ -223,21 +231,22 @@ def commit_INFO():
             "COMM4380",
             "PSYCH3800",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info7", "info8"]
     }
     add_requirement(req6)
 
     req7 = {
-        "id": "INFO_req7",
+        "_id": "info7",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Social Data Analytics",
         "tag": "Behavioral Data",
         "tagDescr": "This can be counted as a Social Data Analytics course for the Behavioral Science concentration in Information Science major.",
         "descr": [
             "Take one of the courses listed below",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO3300",
             "INFO3950",
             "INFO4100",
@@ -247,115 +256,40 @@ def commit_INFO():
             "CS4740",
             "CS3780",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info6", "info8"]
     }
     add_requirement(req7)
 
     req8 = {
-        "id": "INFO_req8",
+        "_id": "info8",
         "type": "E",
-        "major": "INFO",
-        "name": "Behavior in Sociological Context",
-        "tag": "Sociological Behavior",
+        "majorId": "INFO",
+        "name": "Behavior in Context",
+        "tag": "Behavior in Context",
         "tagDescr": "This can be counted as a Behavior in Sociological Context course for the Behavioral Science concentration in Information Science major.",
         "descr": [
             "Take one of the courses listed below.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO3200",
             "INFO3561",
             "INFO4650",
             "STS3440",
+            "INFO4360",
+            "SOC3350",
+            "INFO3450",
+            "INFO4240",
+            "INFO4400",
         ],
-        "parallel": [
-            {
-                "category": "sub-concentration",
-                "condition": "Sociological Behavior",
-                "reqId": "INFO_req8",
-            },
-            {
-                "category": "sub-concentration",
-                "condition": "Network Behavior",
-                "reqId": "INFO_req9",
-            },
-            {
-                "category": "sub-concentration",
-                "condition": "Behavior in Design",
-                "reqId": "INFO_req10",
-            },
-        ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info6", "info7"]
     }
     add_requirement(req8)
 
     req9 = {
-        "id": "INFO_req9",
+        "_id": "info9",
         "type": "E",
-        "major": "INFO",
-        "name": "Behavior in Network Context",
-        "tag": "Network Behavior",
-        "tagDescr": "This can be counted as a Behavior in Network Context course for the Behavioral Science concentration in Information Science major.",
-        "descr": [
-            "Take one of the courses listed below.",
-        ],
-        "number": 1,
-        "courses": [
-            "INFO4360",
-            "SOC3350",
-        ],
-        "parallel": [
-            {
-                "category": "sub-concentration",
-                "condition": "Sociological Behavior",
-                "reqId": "INFO_req8",
-            },
-            {
-                "category": "sub-concentration",
-                "condition": "Network Behavior",
-                "reqId": "INFO_req9",
-            },
-            {
-                "category": "sub-concentration",
-                "condition": "Behavior in Design",
-                "reqId": "INFO_req10",
-            },
-        ],
-    }
-    add_requirement(req9)
-
-    req10 = {
-        "id": "INFO_req10",
-        "type": "E",
-        "major": "INFO",
-        "name": "Behavior in Design Context",
-        "tag": "Behavior in Design",
-        "tagDescr": "This can be counted as a Behavior in Design Context course for the Behavioral Science concentration in Information Science major.",
-        "descr": ["Take one of the courses listed below."],
-        "number": 1,
-        "courses": ["INFO3450", "INFO4240", "INFO4400"],
-        "parallel": [
-            {
-                "category": "sub-concentration",
-                "condition": "Sociological Behavior",
-                "reqId": "INFO_req8",
-            },
-            {
-                "category": "sub-concentration",
-                "condition": "Network Behavior",
-                "reqId": "INFO_req9",
-            },
-            {
-                "category": "sub-concentration",
-                "condition": "Behavior in Design",
-                "reqId": "INFO_req10",
-            },
-        ],
-    }
-    add_requirement(req10)
-
-    req11 = {
-        "id": "INFO_req11",
-        "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Data Analysis",
         "tag": "Data Analysis",
         "tagDescr": "This can be counted as a Data Analysis course for the Data Science concentration in Information Science major.",
@@ -363,8 +297,8 @@ def commit_INFO():
             "Consists of advanced courses in machine learning, data mining, and analytics across departments.",
             "Take one of the courses listed below.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO3300",
             "INFO3900",
             "INFO3950",
@@ -375,13 +309,14 @@ def commit_INFO():
             "ORIE3741",
             "STSCI3740",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info10", "info11", "info12"]
     }
-    add_requirement(req11)
+    add_requirement(req9)
 
-    req12 = {
-        "id": "INFO_req12",
+    req10 = {
+        "_id": "info10",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Domain Expertise",
         "tag": "Data Domain",
         "tagDescr": "This can be counted as a Domain Expertise course for the Data Science concentration in Information Science major.",
@@ -389,8 +324,8 @@ def commit_INFO():
             "Features specialized courses applying data science across diverse fields including sustainability, language processing, and social science.",
             "Take one of the courses listed below.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO2770",
             "INFO3350",
             "INFO3370",
@@ -401,13 +336,14 @@ def commit_INFO():
             "CS4740",
             "PUBPOL2130",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info9", "info11", "info12"]
     }
-    add_requirement(req12)
+    add_requirement(req10)
 
-    req13 = {
-        "id": "INFO_req13",
+    req11 = {
+        "_id": "info11",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Big Data Ethics, Policy and Society",
         "tag": "Data Ethics",
         "tagDescr": "This can be counted as a Big Data Ethics, Policy and Society course for the Data Science concentration in Information Science major.",
@@ -415,8 +351,8 @@ def commit_INFO():
             "Includes courses examining the social, ethical, legal, and policy implications of data science and technology.",
             "Take one of the courses listed below.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO3200",
             "INFO3561",
             "INFO4145",
@@ -432,13 +368,14 @@ def commit_INFO():
             "PUBPOL3460",
             "STS3440",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info9", "info10", "info12"]
     }
-    add_requirement(req13)
+    add_requirement(req11)
 
-    req14 = {
-        "id": "INFO_req14",
+    req12 = {
+        "_id": "info12",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Data Communication",
         "tag": "Data Communication",
         "tagDescr": "This can be counted as a Data Communication course for the Data Science concentration in Information Science major.",
@@ -446,8 +383,8 @@ def commit_INFO():
             "Covers courses in data visualization, information communication, and data-oriented research methods.",
             "Take one of the courses listed below.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO3312",
             "INFO4310",
             "COMM3150",
@@ -457,13 +394,14 @@ def commit_INFO():
             "GOVT2169",
             "SOC3580",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info9", "info10", "info11"]
     }
-    add_requirement(req14)
+    add_requirement(req12)
 
-    req15 = {
-        "id": "INFO_req15",
+    req13 = {
+        "_id": "info13",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Digital Culture and History",
         "tag": "Digital Culture",
         "tagDescr": "This can be counted as a Digital Culture and History course for the Digital Culture and Production concentration in Information Science major.",
@@ -471,8 +409,8 @@ def commit_INFO():
             "You can choose to take 1 course in this section and 2 courses in the Design section."
             "You can also choose to take 3 courses in this section and 0 course in the Design section."
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO2921",
             "INFO3200",
             "INFO3561",
@@ -480,19 +418,20 @@ def commit_INFO():
             "STS3440",
             "STS4040",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info14", "info15"]
     }
-    add_requirement(req15)
+    add_requirement(req13)
 
-    req16 = {
-        "id": "INFO_req16",
+    req14 = {
+        "_id": "info14",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Digital Production",
         "tag": "Digital Production",
         "tagDescr": "This can be counted as a Digital Production course for the Digital Culture and Production concentration in Information Science major.",
         "descr": ["Take one course in this section."],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "​INFO2300",
             "INFO2310",
             "INFO3152",
@@ -501,13 +440,14 @@ def commit_INFO():
             "CS3758",
             "CS4620",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info13", "info15"]
     }
-    add_requirement(req16)
+    add_requirement(req14)
 
-    req17 = {
-        "id": "INFO_req17",
+    req15 = {
+        "_id": "info15",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Media, Art, Design",
         "tag": "Media Design",
         "tagDescr": "This can be counted as a Media, Art, Design course for the Digital Culture and Production concentration in Information Science major.",
@@ -515,8 +455,8 @@ def commit_INFO():
             "Take two courses in this section.",
             "You do not need to take course in this section if you plan to take three courses in the Digital Culture and History section.",
         ],
-        "number": 2,
-        "courses": [
+        "numberOfRequiredCourses": 2,
+        "courseIds": [
             "INFO2750",
             "INFO3450",
             "INFO3660",
@@ -530,19 +470,66 @@ def commit_INFO():
             "COML3115",
             "HIST2293",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info13", "info14"]
+    }
+    add_requirement(req15)
+    
+    req16 = {
+        "_id": "info16",
+        "type": "E",
+        "majorId": "INFO",
+        "name": "Digital Culture and History",
+        "tag": "Digital Culture",
+        "tagDescr": "This can be counted as a Digital Culture and History course for the Digital Culture and Production concentration in Information Science major.",
+        "descr": [
+            "You can choose to take 1 course in this section and 2 courses in the Design section."
+            "You can also choose to take 3 courses in this section and 0 course in the Design section."
+        ],
+        "numberOfRequiredCourses": 3,
+        "courseIds": [
+            "INFO2921",
+            "INFO3200",
+            "INFO3561",
+            "INFO4260",
+            "STS3440",
+            "STS4040",
+        ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info17"]
+    }
+    add_requirement(req16)
+    
+    req17 = {
+        "_id": "info17",
+        "type": "E",
+        "majorId": "INFO",
+        "name": "Digital Production",
+        "tag": "Digital Production",
+        "tagDescr": "This can be counted as a Digital Production course for the Digital Culture and Production concentration in Information Science major.",
+        "descr": ["Take one course in this section."],
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
+            "​INFO2300",
+            "INFO2310",
+            "INFO3152",
+            "INFO3300",
+            "INFO4320",
+            "CS3758",
+            "CS4620",
+        ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info16"]
     }
     add_requirement(req17)
 
     req18 = {
-        "id": "INFO_req18",
+        "_id": "info18",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Frameworks and Institutions",
         "tag": "Ethics Frameworks",
         "tagDescr": "This can be counted as a Frameworks and Institutions course for the Information Ethics, Law, and Policy concentration in Information Science major.",
         "descr": ["Take one course in this section."],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO4113",
             "INFO4200",
             "INFO4250",
@@ -551,19 +538,20 @@ def commit_INFO():
             "PUBPOL3460",
             "STS2761",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info19", "info20", "info21"]
     }
     add_requirement(req18)
 
     req19 = {
-        "id": "INFO_req19",
+        "_id": "info19",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Methods and Analysis",
         "tag": "Ethics Methods",
         "tagDescr": "This can be counted as a Methods and Analysis course for the Information Ethics, Law, and Policy concentration in Information Science major.",
         "descr": ["Take one course in this section."],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO2921",
             "INFO4240",
             "INFO4800",
@@ -571,19 +559,20 @@ def commit_INFO():
             "CRP3210",
             "PUBPOL2300",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info18", "info20", "info21"]
     }
     add_requirement(req19)
 
     req20 = {
-        "id": "INFO_req20",
+        "_id": "info20",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Cases / Topics",
         "tag": "Ethics Cases",
         "tagDescr": "This can be counted as a Cases / Topics course for the Information Ethics, Law, and Policy concentration in Information Science major.",
         "descr": ["Take one course in this section."],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO3200",
             "INFO3460",
             "INFO3561",
@@ -595,13 +584,14 @@ def commit_INFO():
             "STS3440",
             "STS4040",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info18", "info19", "info21"]
     }
     add_requirement(req20)
 
     req21 = {
-        "id": "INFO_req21",
+        "_id": "info21",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Tools and Technical Domains",
         "tag": "Ethics Tools",
         "tagDescr": "This can be counted as a Tools and Technical Domains course for the Information Ethics, Law, and Policy concentration in Information Science major.",
@@ -609,8 +599,8 @@ def commit_INFO():
             "Take one course in this section.",
             "Students may petition the Director of Undergraduate Studies to allow any upper-level (3000 or above) technical IS course relevant to their work in ELP to satisfy this category.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO3300",
             "INFO3350",
             "INFO3370",
@@ -618,52 +608,55 @@ def commit_INFO():
             "INFO4120",
             "INFO4300",
             "INFO4350",
-        ],
+        ],  
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info18", "info19", "info20"]
     }
     add_requirement(req21)
 
     req22 = {
-        "id": "INFO_req22",
-        "type": "C",
-        "major": "INFO",
-        "name": "Required Course",
-        "tag": "IT Core",
+        "_id": "info22",
+        "type": "E",
+        "majorId": "INFO",
+        "name": "Object-Oriented Programming",
+        "tag": "OOP",
         "tagDescr": "This is a core course for the Interactive Technologies concentration in Information Science major.",
         "descr": [
             "CS 2110 is a required course for this concentration.",
         ],
-        "number": 1,
-        "courseGrps": [{"id": 1, "courses": ["CS2110"]}],
+        "numberOfRequiredCourses": 1,
+        "courseIds": ["CS2110", "CS2112"],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info23", "info24", "info25"]
     }
     add_requirement(req22)
 
     req23 = {
-        "id": "INFO_req23",
+        "_id": "info23",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Building with Hardware",
         "tag": "IT Hardware",
         "tagDescr": "This can be counted as a Building with Hardware course for the Interactive Technologies concentration in Information Science major.",
         "descr": [
             "Take one of the three courses for this requirement.",
         ],
-        "number": 1,
-        "courses": ["INFO4120", "INFO4320", "CS4758"],
+        "numberOfRequiredCourses": 1,
+        "courseIds": ["INFO4120", "INFO4320", "CS4758"],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info22", "info24", "info25"]
     }
     add_requirement(req23)
 
     req24 = {
-        "id": "INFO_req24",
+        "_id": "info24",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Working with Data/Software",
         "tag": "IT Software",
         "tagDescr": "This can be counted as a Working with Data/Software course for the Interactive Technologies concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO3300",
             "INFO4340",
             "INFO4555",
@@ -676,21 +669,22 @@ def commit_INFO():
             "ORIE3741",
             "STSCI3740",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info22", "info23", "info25"]
     }
     add_requirement(req24)
 
     req25 = {
-        "id": "INFO_req25",
+        "_id": "info25",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Context/Application Domains",
         "tag": "IT Context",
         "tagDescr": "This can be counted as a Context/Application Domains course for the Interactive Technologies concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO4152",
             "INFO4154",
             "INFO4275",
@@ -702,55 +696,135 @@ def commit_INFO():
             "INFO4940",
             "CS4752",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info22", "info23", "info24"]
     }
     add_requirement(req25)
-
+    
     req26 = {
-        "id": "INFO_req26",
+        "_id": "info26",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
+        "name": "Models",
+        "tag": "Network Models",
+        "tagDescr": "This can be counted as a Models course for the Networks, Crowds, and Markets concentration in Information Science major.",
+        "descr": [
+            "Take two of the courses for this requirement.",
+        ],
+        "numberOfRequiredCourses": 2,
+        "courseIds": [
+            "INFO4220",
+            "INFO4360",
+            "INFO4940",
+            "COMM3150",
+            "ECON3810",
+            "ECON4020",
+            "ECON4610",
+            "ECON4660",
+            "ORIE4350",
+            "SOC3080",
+        ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info27", "info28"]
+    }
+    add_requirement(req26)
+    
+    req27 = {
+        "_id": "info27",
+        "type": "E",
+        "majorId": "INFO",
+        "name": "Data",
+        "tag": "Network Data",
+        "tagDescr": "This can be counted as a Data course for the Networks, Crowds, and Markets concentration in Information Science major.",
+        "descr": [
+            "Take one of the courses for this requirement.",
+        ],
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
+            "INFO3300",
+            "INFO4300",
+            "INFO4350",
+            "INFO3950",
+            "INFO4940",
+            "CS4740",
+            "CS3780",
+            "ECON3120",
+            "ECON3140",
+        ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info26", "info28"]
+    }
+    add_requirement(req27)
+    
+    req28 = {
+        "_id": "info28",
+        "type": "E",
+        "majorId": "INFO",
+        "name": "Policy / Values",
+        "tag": "Network Policy",
+        "tagDescr": "This can be counted as a Policy / Values course for the Networks, Crowds, and Markets concentration in Information Science major.",
+        "descr": [
+            "Take one of the courses for this requirement.",
+        ],
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
+            "INFO4140",
+            "INFO4145",
+            "INFO4200",
+            "INFO4240",
+            "INFO4250",
+            "INFO4940",
+            "PUBPOL3460",
+        ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info26", "info27"]
+    }
+    add_requirement(req28)
+
+    req29 = {
+        "_id": "info29",
+        "type": "E",
+        "majorId": "INFO",
         "name": "Core Principles of Design",
         "tag": "UX Principles",
         "tagDescr": "This can be counted as a Core Principle course for the UX Design concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO3450",
             "INFO4400",
             "INFO4410",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info30", "info31", "info32"]
     }
-    add_requirement(req26)
+    add_requirement(req29)
 
-    req27 = {
-        "id": "INFO_req27",
+    req30 = {
+        "_id": "info30",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Design in Context",
         "tag": "UX Context",
         "tagDescr": "This can be counted as a Context course for the UX Design concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
-        "number": 1,
-        "courses": ["INFO2921", "INFO4240", "INFO4420", "INFO4505"],
+        "numberOfRequiredCourses": 1,
+        "courseIds": ["INFO2921", "INFO4240", "INFO4420", "INFO4505"],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info29", "info31", "info32"]
     }
-    add_requirement(req27)
+    add_requirement(req30)
 
-    req28 = {
-        "id": "INFO_req28",
+    req31 = {
+        "_id": "info31",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Knowing the User",
         "tag": "UX User",
         "tagDescr": "This can be counted as a Knowing the User course for the UX Design concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO3460",
             "INFO4125",
             "INFO4430",
@@ -759,21 +833,22 @@ def commit_INFO():
             "COMM4380",
             "PSYCH3420",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info29", "info30", "info32"]
     }
-    add_requirement(req28)
+    add_requirement(req31)
 
-    req29 = {
-        "id": "INFO_req29",
+    req32 = {
+        "_id": "info32",
         "type": "E",
-        "major": "INFO",
+        "majorId": "INFO",
         "name": "Knowing the Technology",
         "tag": "UX Technology",
         "tagDescr": "This can be counted as a Knowing the Technology course for the UX Design concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
-        "number": 1,
-        "courses": [
+        "numberOfRequiredCourses": 1,
+        "courseIds": [
             "INFO3152",
             "INFO4152",
             "INFO4154",
@@ -783,8 +858,9 @@ def commit_INFO():
             "INFO4340",
             "CS5150",
         ],
+        "overlap": ["info1", "info2", "info3", "info4", "info5", "info29", "info30", "info31"]
     }
-    add_requirement(req29)
+    add_requirement(req32)
 
 
 if __name__ == "__main__":

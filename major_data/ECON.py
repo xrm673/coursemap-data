@@ -4,24 +4,20 @@ from common import *
 
 def commit_ECON():
     major = {
-        "id": "ECON",
+        "_id": "ECON",
         "name": "Economics",
         "needsYear": False,
         "needsCollege": False,
         "colleges": [
-            {"id": "CAS", "name": "Arts and Sciences"},
+            {"collegeId": "CAS", "name": "College of Arts and Sciences"},
         ],
-        "requiredCourses": 15,
-        "basicRequirements": [
+        "numberOfRequiredCourses": 10,
+        "rawBasicRequirements": [
             {
-                "requirements": [
-                    "ECON_req1",
-                    "ECON_req2",
-                    "ECON_req3",
-                ]
+                "requirements": ["econ1", "econ2", "econ3"],
             }
         ],
-        "init": [
+        "onboardingCourses": [
             "ECON1110",
             "ECON1120",
             "MATH1110",
@@ -36,42 +32,44 @@ def commit_ECON():
     add_major(major)
 
     req1 = {
-        "id": "ECON_req1",
+        "_id": "econ1",
         "type": "C",
-        "major": "ECON",
-        "name": "Basic Courses",
+        "majorId": "ECON",
+        "name": "Basic",
         "tag": "ECON Basic",
         "tagDescr": "This is a basic course of Economics major",
         "descr": [
             "Take ECON 1100, ECON 1120, and MATH 1110 before declare the major.",
         ],
-        "number": 3,
+        "numberOfRequiredCourses": 3,
         "courseGrps": [
-            {"id": 1, "courses": ["ECON1110"]},
-            {"id": 2, "courses": ["ECON1120"]},
-            {"id": 3, "courses": ["MATH1110"]},
+            {"_id": 1, "courseIds": ["ECON1110"]},
+            {"_id": 2, "courseIds": ["ECON1120"]},
+            {"_id": 3, "courseIds": ["MATH1110"]},
         ],
+        "overlap": ["econ2", "econ3"],
         "note": None,
     }
     add_requirement(req1)
     
     req2 = {
-        "id": "ECON_req2",
+        "_id": "econ2",
         "type": "C",
-        "major": "ECON",
-        "name": "Core Courses",
+        "majorId": "ECON",
+        "name": "Core",
         "tag": "ECON Core",
         "tagDescr": "This is a core course of Economics major",
         "descr": [
             "All economics students must take four core economics courses.",
         ],
-        "number": 4,
+        "numberOfRequiredCourses": 4,
         "courseGrps": [
-            {"id": 1, "courses": ["ECON3030"]},
-            {"id": 2, "courses": ["ECON3040"]},
-            {"id": 3, "courses": ["ECON3110", "ECON3130"]},
-            {"id": 4, "courses": ["ECON3120", "ECON3140"]},
+            {"_id": 1, "courseIds": ["ECON3030"]},
+            {"_id": 2, "courseIds": ["ECON3040"]},
+            {"_id": 3, "courseIds": ["ECON3110", "ECON3130"]},
+            {"_id": 4, "courseIds": ["ECON3120", "ECON3140"]},
         ],
+        "overlap": ["econ1", "econ3"],
         "note": None,
     }
     add_requirement(req2)
@@ -83,10 +81,10 @@ def commit_ECON():
         excluded=["ECON4999"],
     )
     req3 = {
-        "id": "ECON_req3",
+        "_id": "econ3",
         "type": "E",
-        "major": "ECON",
-        "name": "Electives",
+        "majorId": "ECON",
+        "name": "Elective",
         "tag": "ECON Electives",
         "tagDescr": "This can be counted as an elective course for Economics major",
         "descr": [
@@ -94,8 +92,9 @@ def commit_ECON():
             "The Economics Department recommends taking at least one seminar courses(ECON 4900-4989).",
             "ECON 4999 is not counted for this requirement.",
         ],
-        "number": 3,
-        "courses": req3_courses,
+        "numberOfRequiredCourses": 3,
+        "courseIds": req3_courses,
+        "overlap": ["econ1", "econ2"],
         "note": None,
     }
     add_requirement(req3)
