@@ -36,8 +36,6 @@ def commit_ECON():
         "type": "C",
         "majorId": "ECON",
         "name": "Basic",
-        "tag": "ECON Basic",
-        "tagDescr": "This is a basic course of Economics major",
         "descr": [
             "Take ECON 1100, ECON 1120, and MATH 1110 before declare the major.",
         ],
@@ -57,8 +55,6 @@ def commit_ECON():
         "type": "C",
         "majorId": "ECON",
         "name": "Core",
-        "tag": "ECON Core",
-        "tagDescr": "This is a core course of Economics major",
         "descr": [
             "All economics students must take four core economics courses.",
         ],
@@ -85,8 +81,6 @@ def commit_ECON():
         "type": "E",
         "majorId": "ECON",
         "name": "Elective",
-        "tag": "ECON Electives",
-        "tagDescr": "This can be counted as an elective course for Economics major",
         "descr": [
             "All economicsstudents must take at least three courses at the 4000-level.",
             "The Economics Department recommends taking at least one seminar courses(ECON 4900-4989).",

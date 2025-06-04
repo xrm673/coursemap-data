@@ -74,8 +74,6 @@ def commit_CS():
         "type": "C",
         "majorId": "CS",
         "name": "Intro Programming",
-        "tag": "Intro Programming",
-        "tagDescr": "This is a Introductory Programming course of Computer Science major",
         "descr": [
             "Take two introductory programming courses CS 111X and CS 2110 (or equivalent).",
         ],
@@ -95,8 +93,6 @@ def commit_CS():
         "type": "C",
         "majorId": "CS",
         "name": "Math",
-        "tag": "CS Math",
-        "tagDescr": "This is a calculus course of Computer Science major",
         "descr": [
             "Take a calculus sequence of 3 courses.",
             "A&S students can take either MATH 1110-1120-2210 sequence or MATH 1910-1920-2940 sequence.",
@@ -118,8 +114,6 @@ def commit_CS():
         "type": "C",
         "majorId": "CS",
         "name": "Engineering Math",
-        "tag": "CS Math",
-        "tagDescr": "This is a calculus course of Computer Science major",
         "descr": [
             "Take a calculus sequence of 3 courses.",
             "Engineering students can only take MATH 1910-1920-2940 sequence.",
@@ -141,8 +135,6 @@ def commit_CS():
         "type": "C",
         "majorId": "CS",
         "name": "Core",
-        "tag": "CS Core",
-        "tagDescr": "This is a core course of Computer Science major",
         "descr": [
             "All FA24 and later matriculants must take one course from each of the following course group listed below.",
         ],
@@ -166,8 +158,6 @@ def commit_CS():
         "type": "C",
         "majorId": "CS",
         "name": "Core",
-        "tag": "CS Core",
-        "tagDescr": "This is a core course of Computer Science major",
         "descr": [
             "All Pre FA24 matriculants must take one course from each of the following course group listed below.",
         ],
@@ -197,8 +187,6 @@ def commit_CS():
         "type": "E",
         "majorId": "CS",
         "name": "Elective",
-        "tag": "CS Electives",
-        "tagDescr": "This can be counted as an elective course for Computer Science major",
         "descr": [
             "All FA24 and later matriculants must take two CS 4000+ courses (3+ credits each).",
             "CS 4090, CS 4998, and CS 4999 are NOT allowed. CS 3700 or CS 3780 allowed if not used in CS core.",
@@ -223,8 +211,6 @@ def commit_CS():
         "type": "E",
         "majorId": "CS",
         "name": "Electives",
-        "tag": "CS Electives",
-        "tagDescr": "This can be counted as an elective course for Computer Science major",
         "descr": [
             "All pre-fall 2024 matriculants must take three CS 4000+ courses (3+ credits each).",
             "CS 4090, CS 4998, and CS 4999 are NOT allowed. CS 3700 or CS 3780 allowed if not used in CS core.",
@@ -242,8 +228,6 @@ def commit_CS():
         "type": "E",
         "majorId": "CS",
         "name": "Probability",
-        "tag": "CS Probability",
-        "tagDescr": "This can be counted as a probability course for Computer Science major",
         "descr": [
             "All pre-fall 2024 matriculants must take one CS-approved Probability course.",
             "This probability course can be used to satisfy another major requirement.",
@@ -263,8 +247,6 @@ def commit_CS():
         "type": "E",
         "majorId": "CS",
         "name": "Practicum or Project",
-        "tag": "CS Practicum",
-        "tagDescr": "This can be counted as a Practicum or Project course for Computer Science major",
         "descr": [
             "Accepted courses are CS practicums (CS 4xx1), or CS 3152, CS 4152, CS 4154, CS 4740, CS 4752, CS 5150, CS 5152, CS 5412, CS 5414, CS 5431, CS 5625, or CS 5643.",
         ],

@@ -77,8 +77,6 @@ def commit_INFO():
         "type": "C",
         "majorId": "INFO",
         "name": "Core",
-        "tag": "INFO Core",
-        "tagDescr": "This is a core course of Information Science major",
         "descr": [
             "Information Science students must take at lease one course from each of the course group listed below.",
         ],
@@ -104,8 +102,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Programming",
-        "tag": "INFO Programming",
-        "tagDescr": "This can be counted as a programming course for Information Science major",
         "descr": [
             "Take CS 1110 or CS 1112 for letter grade to fulfill the programming requirement."
         ],
@@ -125,8 +121,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Math",
-        "tag": "INFO Math",
-        "tagDescr": "This can be counted as a math course for Information Science major",
         "descr": [
             "Take a Calculus I course (MATH 1106, MATH 1110, or MATH 1910) for letter grade to fulfill the math requirement. ",
             "AP credits can fulfill this requirement.",
@@ -147,8 +141,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Statistics",
-        "tag": "INFO Stats",
-        "tagDescr": "This can be counted as a statistic course for Information Science major",
         "descr": [
             "Take one of the statistics courses provided below. ",
             "AP credits may NOT be used to fulfill this requirement.",
@@ -189,8 +181,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Electives",
-        "tag": "INFO Electives",
-        "tagDescr": "This can be counted as an elective for Information Science major",
         "descr": [
             "Complete three electives from any INFO 3000+ course (including INFO 4900 but excluding INFO 4998 and INFO 4910).",
             "INFO 2300/2310 (one of them), CS 2110/2112, CS 3110, and CS 3410 may also be counted.",
@@ -216,8 +206,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Social Behavior",
-        "tag": "Social Behavior",
-        "tagDescr": "This can be counted as a Social Behavior course for the Behavioral Science concentration in Information Science major.",
         "descr": ["Take two of the courses listed below."],
         "numberOfRequiredCourses": 2,
         "courseIds": [
@@ -240,8 +228,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Social Data Analytics",
-        "tag": "Behavioral Data",
-        "tagDescr": "This can be counted as a Social Data Analytics course for the Behavioral Science concentration in Information Science major.",
         "descr": [
             "Take one of the courses listed below",
         ],
@@ -265,8 +251,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Behavior in Context",
-        "tag": "Behavior in Context",
-        "tagDescr": "This can be counted as a Behavior in Sociological Context course for the Behavioral Science concentration in Information Science major.",
         "descr": [
             "Take one of the courses listed below.",
         ],
@@ -291,8 +275,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Data Analysis",
-        "tag": "Data Analysis",
-        "tagDescr": "This can be counted as a Data Analysis course for the Data Science concentration in Information Science major.",
         "descr": [
             "Consists of advanced courses in machine learning, data mining, and analytics across departments.",
             "Take one of the courses listed below.",
@@ -318,8 +300,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Domain Expertise",
-        "tag": "Data Domain",
-        "tagDescr": "This can be counted as a Domain Expertise course for the Data Science concentration in Information Science major.",
         "descr": [
             "Features specialized courses applying data science across diverse fields including sustainability, language processing, and social science.",
             "Take one of the courses listed below.",
@@ -345,8 +325,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Big Data Ethics, Policy and Society",
-        "tag": "Data Ethics",
-        "tagDescr": "This can be counted as a Big Data Ethics, Policy and Society course for the Data Science concentration in Information Science major.",
         "descr": [
             "Includes courses examining the social, ethical, legal, and policy implications of data science and technology.",
             "Take one of the courses listed below.",
@@ -377,8 +355,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Data Communication",
-        "tag": "Data Communication",
-        "tagDescr": "This can be counted as a Data Communication course for the Data Science concentration in Information Science major.",
         "descr": [
             "Covers courses in data visualization, information communication, and data-oriented research methods.",
             "Take one of the courses listed below.",
@@ -403,8 +379,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Digital Culture and History",
-        "tag": "Digital Culture",
-        "tagDescr": "This can be counted as a Digital Culture and History course for the Digital Culture and Production concentration in Information Science major.",
         "descr": [
             "You can choose to take 1 course in this section and 2 courses in the Design section."
             "You can also choose to take 3 courses in this section and 0 course in the Design section."
@@ -427,8 +401,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Digital Production",
-        "tag": "Digital Production",
-        "tagDescr": "This can be counted as a Digital Production course for the Digital Culture and Production concentration in Information Science major.",
         "descr": ["Take one course in this section."],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -449,8 +421,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Media, Art, Design",
-        "tag": "Media Design",
-        "tagDescr": "This can be counted as a Media, Art, Design course for the Digital Culture and Production concentration in Information Science major.",
         "descr": [
             "Take two courses in this section.",
             "You do not need to take course in this section if you plan to take three courses in the Digital Culture and History section.",
@@ -479,8 +449,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Digital Culture and History",
-        "tag": "Digital Culture",
-        "tagDescr": "This can be counted as a Digital Culture and History course for the Digital Culture and Production concentration in Information Science major.",
         "descr": [
             "You can choose to take 1 course in this section and 2 courses in the Design section."
             "You can also choose to take 3 courses in this section and 0 course in the Design section."
@@ -503,8 +471,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Digital Production",
-        "tag": "Digital Production",
-        "tagDescr": "This can be counted as a Digital Production course for the Digital Culture and Production concentration in Information Science major.",
         "descr": ["Take one course in this section."],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -525,8 +491,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Frameworks and Institutions",
-        "tag": "Ethics Frameworks",
-        "tagDescr": "This can be counted as a Frameworks and Institutions course for the Information Ethics, Law, and Policy concentration in Information Science major.",
         "descr": ["Take one course in this section."],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -547,8 +511,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Methods and Analysis",
-        "tag": "Ethics Methods",
-        "tagDescr": "This can be counted as a Methods and Analysis course for the Information Ethics, Law, and Policy concentration in Information Science major.",
         "descr": ["Take one course in this section."],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -568,8 +530,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Cases / Topics",
-        "tag": "Ethics Cases",
-        "tagDescr": "This can be counted as a Cases / Topics course for the Information Ethics, Law, and Policy concentration in Information Science major.",
         "descr": ["Take one course in this section."],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -593,8 +553,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Tools and Technical Domains",
-        "tag": "Ethics Tools",
-        "tagDescr": "This can be counted as a Tools and Technical Domains course for the Information Ethics, Law, and Policy concentration in Information Science major.",
         "descr": [
             "Take one course in this section.",
             "Students may petition the Director of Undergraduate Studies to allow any upper-level (3000 or above) technical IS course relevant to their work in ELP to satisfy this category.",
@@ -618,8 +576,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Object-Oriented Programming",
-        "tag": "OOP",
-        "tagDescr": "This is a core course for the Interactive Technologies concentration in Information Science major.",
         "descr": [
             "CS 2110 is a required course for this concentration.",
         ],
@@ -634,8 +590,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Building with Hardware",
-        "tag": "IT Hardware",
-        "tagDescr": "This can be counted as a Building with Hardware course for the Interactive Technologies concentration in Information Science major.",
         "descr": [
             "Take one of the three courses for this requirement.",
         ],
@@ -650,8 +604,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Working with Data/Software",
-        "tag": "IT Software",
-        "tagDescr": "This can be counted as a Working with Data/Software course for the Interactive Technologies concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
@@ -678,8 +630,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Context/Application Domains",
-        "tag": "IT Context",
-        "tagDescr": "This can be counted as a Context/Application Domains course for the Interactive Technologies concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
@@ -705,8 +655,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Models",
-        "tag": "Network Models",
-        "tagDescr": "This can be counted as a Models course for the Networks, Crowds, and Markets concentration in Information Science major.",
         "descr": [
             "Take two of the courses for this requirement.",
         ],
@@ -732,8 +680,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Data",
-        "tag": "Network Data",
-        "tagDescr": "This can be counted as a Data course for the Networks, Crowds, and Markets concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
@@ -758,8 +704,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Policy / Values",
-        "tag": "Network Policy",
-        "tagDescr": "This can be counted as a Policy / Values course for the Networks, Crowds, and Markets concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
@@ -782,8 +726,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Core Principles of Design",
-        "tag": "UX Principles",
-        "tagDescr": "This can be counted as a Core Principle course for the UX Design concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
@@ -802,8 +744,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Design in Context",
-        "tag": "UX Context",
-        "tagDescr": "This can be counted as a Context course for the UX Design concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
@@ -818,8 +758,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Knowing the User",
-        "tag": "UX User",
-        "tagDescr": "This can be counted as a Knowing the User course for the UX Design concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],
@@ -842,8 +780,6 @@ def commit_INFO():
         "type": "E",
         "majorId": "INFO",
         "name": "Knowing the Technology",
-        "tag": "UX Technology",
-        "tagDescr": "This can be counted as a Knowing the Technology course for the UX Design concentration in Information Science major.",
         "descr": [
             "Take one of the courses for this requirement.",
         ],

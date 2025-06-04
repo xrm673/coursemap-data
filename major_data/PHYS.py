@@ -41,8 +41,6 @@ def commit_PHYS():
         "type": "C",
         "majorId": "PHYS",
         "name": "Intro Physics",
-        "tag": "PHYS Intro",
-        "tagDescr": "This is a Introductory Physics course of Physics major",
         "descr": [
             "All physics majors must complete three-semester introductory physics sequence plus special relativity.",
             "PHYS 1116, 2217, and 2218 are augmented courses, recommended to students planning professional or graduate work in physics."
@@ -63,8 +61,6 @@ def commit_PHYS():
         "type": "C",
         "majorId": "PHYS",
         "name": "Math",
-        "tag": "PHYS Math",
-        "tagDescr": "This can be counted as a Mathematics course for Physics major",
         "descr": [
             "Mathematics courses covering single and multivariable calculus, linear algebra, series representations, and complex analysis.",
         ],
@@ -85,8 +81,6 @@ def commit_PHYS():
         "type": "C",
         "majorId": "PHYS",
         "name": "Quantum Mechanics",
-        "tag": "PHYS Quantum",
-        "tagDescr": "This is a Quantum Mechanics course of Physics major",
         "descr": [
             "All physics majors must complete the two-course sequence in modern physics"
         ],
@@ -105,8 +99,6 @@ def commit_PHYS():
         "type": "C",
         "majorId": "PHYS",
         "name": "Intermediate Physics",
-        "tag": "PHYS Intermediate",
-        "tagDescr": "This is an Intermediate Mechanics or Electromagnetism course for Physics major",
         "descr": [
             "All physics majors must complete an intermediate classical mechanics course and an electromagnetism course.",
         ],
@@ -123,8 +115,6 @@ def commit_PHYS():
         "type": "C",
         "majorId": "PHYS",
         "name": "Inside Concentration Core",
-        "tag": "PHYS Isd-Core",
-        "tagDescr": "This can be counted as a core course for the Inside Concentration of Physics major.",
         "descr": [
             "Inside Concentrators must complete PHYS 4410 and PHYS 4230.",
         ],
@@ -148,8 +138,6 @@ def commit_PHYS():
         "type": "E",
         "majorId": "PHYS",
         "name": "Inside Concentration Electives",
-        "tag": "PHYS Isd-Elctv",
-        "tagDescr": "This can be counted as an elective course for the Inside Concentration of Physics major",
         "descr": [
             "Complete 7 additional credits of 3000+ level physics classes.",
             "PHYS 4443 is recommended, ASTRO 3302, ASTRO 4431, and AEP 4340 may also be counted.",
@@ -175,8 +163,6 @@ def commit_PHYS():
         "type": "E",
         "majorId": "PHYS",
         "name": "Inside Concentration Math",
-        "tag": "PHYS Isd-Math",
-        "tagDescr": "This can be counted as a math course for the Inside Concentration of Physics major",
         "descr": [
             "Complete 2 additional 3000+ level math courses.",
             "AEP 3200 and AEP 4200 are included and recommended."
@@ -193,8 +179,6 @@ def commit_PHYS():
         "type": "E",
         "majorId": "PHYS",
         "name": "Outside Concentration",
-        "tag": "PHYS Outside",
-        "tagDescr": "This can be counted as a course for the Outside Concentration of Physics major",
         "descr": [
             "Complete 15 credits in an internally coherent concentration outside of physics.",
             "At least 8 of the 15 credits must be for 3000+ level classes",
@@ -217,8 +201,6 @@ def commit_PHYS():
         "type": "E",
         "majorId": "PHYS",
         "name": "Lab",
-        "tag": "PHYS Lab",
-        "tagDescr": "This can be counted as a Laboratory course for Physics major",
         "descr": [
             "All physics majors must complete one laboratory course selected from the following courses.",
         ],
