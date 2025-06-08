@@ -84,7 +84,7 @@ def commit_ARTH():
         "type": "E",
         "majorId": "ARTH",
         "name": "4000-level",
-        "descr": ["Take at least one ARTH course at the 4000-level."],
+        "descr": ["Take at least two ARTH course at the 4000-level."],
         "numberOfRequiredCourses": 2,
         "courseIds": req4_courses,
         "overlap": ["arth1", "arth2", "arth3", "arth5"],

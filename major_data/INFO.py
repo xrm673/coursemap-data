@@ -61,13 +61,11 @@ def commit_INFO():
             "INFO1200",
             "INFO1260",
             "INFO1300",
-            "INFO1998",
             "CS1110",
             "MATH1110",
             "INFO2040",
             "INFO2450",
             "INFO2950",
-            "INFO2951",
         ],
     }
     add_major(major)
@@ -173,7 +171,7 @@ def commit_INFO():
     req5_courses = get_courses_by_subject_min_level(
         "INFO",
         3,
-        excluded=["INFO4998", "INFO4910", "INFO5900"],
+        excluded=["INFO4998", "INFO4910", "INFO4997", "INFO5000", "INFO5900", "INFO5905"],
         included=["INFO2300", "INFO2310", "CS2110", "CS2112", "CS3110", "CS3410"],
     )
     req5 = {
@@ -216,8 +214,16 @@ def commit_INFO():
             "INFO4500",
             "INFO4505",
             "INFO4800",
+            "INFO4940",
             "COMM4380",
             "PSYCH3800",
+        ],
+        "courseNotes": [
+            {
+                "courseId": "INFO4940",
+                "grpIdentifierArray": ["Building Inclusive Computing Organizations",
+                                       "Technology and Underserved Communities"]
+            }
         ],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info7", "info8"]
     }
@@ -238,10 +244,16 @@ def commit_INFO():
             "INFO4100",
             "INFO4300",
             "INFO4350",
+            "INFO4940",
             "COMM4242",
             "CS4740",
             "CS3780",
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["How LLMs Work, Their Potential, and Limitations",
+                                   "Applied Machine Learning: Methods and Applications"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info6", "info8"]
     }
     add_requirement(req7)
@@ -257,14 +269,24 @@ def commit_INFO():
         "numberOfRequiredCourses": 1,
         "courseIds": [
             "INFO3200",
-            "INFO3561",
-            "INFO4650",
-            "STS3440",
+            "INFO4140",
+            "INFO4940",
+            "COMM4940",
             "INFO4360",
-            "SOC3350",
             "INFO3450",
             "INFO4240",
             "INFO4400",
+        ],
+        "courseNotes": [
+            {
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Law, Policy, and Politics of AI",
+                                   "Technology and Social Change Practicum"]
+            },
+            {
+            "courseId": "COMM4940",
+            "grpIdentifierArray": ["Human-Algorithm Behavior"]
+            },
         ],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info6", "info7"]
     }
@@ -284,13 +306,17 @@ def commit_INFO():
             "INFO3300",
             "INFO3900",
             "INFO3950",
+            "INFO4940",
             "CS3780",
-            "CS4786",
             "ORIE3120",
             "ORIE4740",
             "ORIE3741",
             "STSCI3740",
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Applied Machine Learning: Methods and Applications"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info10", "info11", "info12"]
     }
     add_requirement(req9)
@@ -307,15 +333,21 @@ def commit_INFO():
         "numberOfRequiredCourses": 1,
         "courseIds": [
             "INFO2770",
+            "INFO3130",
             "INFO3350",
             "INFO3370",
             "INFO4100",
             "INFO4120",
             "INFO4300",
             "INFO4350",
+            "INFO4940",
             "CS4740",
-            "PUBPOL2130",
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["How LLMs Work, Their Potential, and Limitations",
+                                   "Advanced NLP for Humanities Research"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info9", "info11", "info12"]
     }
     add_requirement(req10)
@@ -332,20 +364,25 @@ def commit_INFO():
         "numberOfRequiredCourses": 1,
         "courseIds": [
             "INFO3200",
-            "INFO3561",
+            "INFO4140",
             "INFO4145",
             "INFO4200",
             "INFO4240",
             "INFO4250",
             "INFO4260",
-            "INFO4270",
             "INFO4390",
             "INFO4561",
-            "COMM4242",
+            "INFO4940",
             "ENGL3778",
-            "PUBPOL3460",
-            "STS3440",
+            "PUBPOL3460"
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Building Inclusive Computing Organizations",
+                                   "Law, Policy and Politics of AI",
+                                   "Technology and Social Change Practicum",
+                                   "U.S. Copyright Law"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info9", "info10", "info12"]
     }
     add_requirement(req11)
@@ -365,11 +402,14 @@ def commit_INFO():
             "INFO4310",
             "COMM3150",
             "COMM3189",
-            "COMM4200",
             "COMM4860",
-            "GOVT2169",
+            "COMM4940",
             "SOC3580",
         ],
+        "courseNotes": [{
+            "courseId": "COMM4940",
+            "grpIdentifierArray": ["Data and Technology for Organizing"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info9", "info10", "info11"]
     }
     add_requirement(req12)
@@ -387,11 +427,17 @@ def commit_INFO():
         "courseIds": [
             "INFO2921",
             "INFO3200",
-            "INFO3561",
+            "INFO4140",
             "INFO4260",
-            "STS3440",
+            "INFO4940",
             "STS4040",
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Clockwork: Infrastructure, Work, and Time",
+                                   "Law, Policy and Politics of AI",
+                                   "U.S. Copyright Law"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info14", "info15"]
     }
     add_requirement(req13)
@@ -427,19 +473,24 @@ def commit_INFO():
         ],
         "numberOfRequiredCourses": 2,
         "courseIds": [
-            "INFO2750",
             "INFO3450",
             "INFO3660",
             "INFO4152",
             "INFO4240",
             "INFO4400",
             "INFO4420",
+            "INFO4940",
             "ART3705",
             "ARTH4151",
-            "ARTH4154",
             "COML3115",
-            "HIST2293",
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Design Thinking, Media, and Community",
+                                   "Human Centered Design and Engaged Media",
+                                   "Producing Culture About, With, and Through Tech",
+                                   "Technology and Social Change Practicum"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info13", "info14"]
     }
     add_requirement(req15)
@@ -457,11 +508,17 @@ def commit_INFO():
         "courseIds": [
             "INFO2921",
             "INFO3200",
-            "INFO3561",
+            "INFO4140",
             "INFO4260",
-            "STS3440",
+            "INFO4940",
             "STS4040",
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Clockwork: Infrastructure, Work, and Time",
+                                   "Law, Policy and Politics of AI",
+                                   "U.S. Copyright Law"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info17"]
     }
     add_requirement(req16)
@@ -495,13 +552,19 @@ def commit_INFO():
         "numberOfRequiredCourses": 1,
         "courseIds": [
             "INFO4113",
+            "INFO4140",
             "INFO4200",
             "INFO4250",
             "INFO4301",
+            "INFO4940",
             "HADM4890",
             "PUBPOL3460",
-            "STS2761",
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Law, Policy and Politics of AI",
+                                   "U.S. Copyright Law"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info19", "info20", "info21"]
     }
     add_requirement(req18)
@@ -516,11 +579,15 @@ def commit_INFO():
         "courseIds": [
             "INFO2921",
             "INFO4240",
-            "INFO4800",
-            "COMM4242",
-            "CRP3210",
+            "INFO4940",
             "PUBPOL2300",
+            "PUBPOL2301"
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Clockwork: Infrastructure, Work, and Time",
+                                   "Technology and Social Change Practicum"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info18", "info20", "info21"]
     }
     add_requirement(req19)
@@ -534,16 +601,17 @@ def commit_INFO():
         "numberOfRequiredCourses": 1,
         "courseIds": [
             "INFO3200",
-            "INFO3460",
-            "INFO3561",
             "INFO4145",
             "INFO4260",
-            "INFO4270",
             "INFO4390",
             "INFO4561",
-            "STS3440",
+            "COMM4940",
             "STS4040",
         ],
+        "courseNotes": [{
+            "courseId": "COMM4940",
+            "grpIdentifierArray": ["Human-Algorithm Behavior"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info18", "info19", "info21"]
     }
     add_requirement(req20)
@@ -614,7 +682,6 @@ def commit_INFO():
             "INFO4555",
             "CS4620",
             "CS3780",
-            "CS4786",
             "CS5150",
             "ORIE3120",
             "ORIE4740",
@@ -636,16 +703,16 @@ def commit_INFO():
         "numberOfRequiredCourses": 1,
         "courseIds": [
             "INFO4152",
-            "INFO4154",
-            "INFO4275",
             "INFO4310",
             "INFO4410",
             "INFO4430",
             "INFO4505",
-            "INFO4940",
-            "INFO4940",
-            "CS4752",
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Human-AI Interaction Design Research",
+                                   "Producing Culture About, With, and Through Tech"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info22", "info23", "info24"]
     }
     add_requirement(req25)
@@ -671,6 +738,10 @@ def commit_INFO():
             "ORIE4350",
             "SOC3080",
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Social Dynamics and Network Analytics"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info27", "info28"]
     }
     add_requirement(req26)
@@ -695,6 +766,10 @@ def commit_INFO():
             "ECON3120",
             "ECON3140",
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Applied Machine Learning: Methods and Applications"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info26", "info28"]
     }
     add_requirement(req27)
@@ -715,7 +790,20 @@ def commit_INFO():
             "INFO4240",
             "INFO4250",
             "INFO4940",
+            "COMM4940",
             "PUBPOL3460",
+        ],
+        "courseNotes": [
+            {
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Law, Policy and Politics of AI",
+                                   "Technology and Social Change Practicum",
+                                   "U.S. Copyright Law"]
+            }, 
+            {
+                "courseId": "COMM4940",
+                "grpIdentifierArray": ["Human-Algorithm Behavior"]
+            }
         ],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info26", "info27"]
     }
@@ -734,7 +822,12 @@ def commit_INFO():
             "INFO3450",
             "INFO4400",
             "INFO4410",
+            "INFO4940",
         ],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Designing AI Products and Services"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info30", "info31", "info32"]
     }
     add_requirement(req29)
@@ -748,7 +841,14 @@ def commit_INFO():
             "Take one of the courses for this requirement.",
         ],
         "numberOfRequiredCourses": 1,
-        "courseIds": ["INFO2921", "INFO4240", "INFO4420", "INFO4505"],
+        "courseIds": ["INFO2921", "INFO4240", "INFO4420", "INFO4505", "INFO4940"],
+        "courseNotes": [{
+            "courseId": "INFO4940",
+            "grpIdentifierArray": ["Clockwork: Infrastructure, Work, and Time",
+                                   "Design Thinking, Media, and Community",
+                                   "Human-AI Interaction Design Research",
+                                   "Technology and Social Change Practicum"]
+        }],
         "overlap": ["info1", "info2", "info3", "info4", "info5", "info29", "info31", "info32"]
     }
     add_requirement(req30)
@@ -763,7 +863,6 @@ def commit_INFO():
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
-            "INFO3460",
             "INFO4125",
             "INFO4430",
             "INFO4450",
@@ -787,8 +886,6 @@ def commit_INFO():
         "courseIds": [
             "INFO3152",
             "INFO4152",
-            "INFO4154",
-            "INFO4275",
             "INFO4310",
             "INFO4320",
             "INFO4340",
