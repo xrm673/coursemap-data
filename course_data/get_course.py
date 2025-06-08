@@ -149,6 +149,14 @@ def upload_courses(courses: List[Dict[str, Any]], semester: str, batch_size: int
         try:
             course_id = f"{course['subject']}{course['catalogNbr']}"
             
+            # Check if any group has a topic
+            has_topic = False
+            for group in course.get("enrollGroups", []):
+                _, is_topic = get_group_identifier(group)
+                if is_topic:
+                    has_topic = True
+                    break
+            
             # Check if course exists to determine update strategy
             existing_course = courses_collection.find_one({"_id": course_id})
             
@@ -169,10 +177,14 @@ def upload_courses(courses: List[Dict[str, Any]], semester: str, batch_size: int
                     InsertOne(course_data)
                 )
             else:
-                # Existing course - update semester
+                # Existing course - update semester and courseHasTopic if needed
+                update_fields = {"$addToSet": {"smst": semester}}
+                if has_topic and not existing_course.get("courseHasTopic"):
+                    update_fields["$set"] = {"courseHasTopic": True}
+                
                 semester_update = UpdateOne(
                     {"_id": course_id},
-                    {"$addToSet": {"smst": semester}}
+                    update_fields
                 )
                 bulk_operations.append(semester_update)
                 
@@ -199,9 +211,9 @@ def upload_courses(courses: List[Dict[str, Any]], semester: str, batch_size: int
                                     "enrollGroups.$.grpSmst": semester
                                 },
                                 "$push": {
-                                    "enrollGroups.$.instructors": {
+                                    "enrollGroups.$.instructorHistory": {
                                         "semester": semester,
-                                        "netids": group_data["instructors"][0]["netids"]
+                                        "instructors": group_data["instructorHistory"][0]["instructors"]
                                     },
                                     "enrollGroups.$.sections": {
                                         "$each": group_data["sections"]
@@ -258,6 +270,16 @@ def upload_courses(courses: List[Dict[str, Any]], semester: str, batch_size: int
 
 
 def initialize_single_course(course: Dict[str, Any], semester: str) -> Dict[str, Any]:
+    """
+    Initialize a new course document.
+    
+    Args:
+        course: The course dictionary from the API
+        semester: The semester code
+        
+    Returns:
+        Dictionary containing the course data
+    """
     single_course = {}
     course_id = course["subject"] + course["catalogNbr"]
 
@@ -269,6 +291,17 @@ def initialize_single_course(course: Dict[str, Any], semester: str) -> Dict[str,
     single_course["ttl"] = course["titleLong"]
     single_course["tts"] = course["titleShort"]
     single_course["dsrpn"] = clean(course["description"])
+    
+    # Check if any enrollment group has a topic using get_group_identifier
+    has_topic = False
+    for group in course.get("enrollGroups", []):
+        _, is_topic = get_group_identifier(group)
+        if is_topic:
+            has_topic = True
+            break
+    if has_topic:
+        single_course["courseHasTopic"] = True
+    
     if course["catalogDistr"]:
         single_course["distr"] = parse_distr(course["catalogDistr"])
     if course["catalogOutcomes"]:
@@ -338,13 +371,15 @@ def initialize_enroll_group(
     enroll_group = {} 
     enroll_group["grpIdentifier"] = identifier
     enroll_group["hasTopic"] = has_topic
+    if has_topic:
+        enroll_group["topic"] = identifier
     enroll_group["grpSmst"] = [semester]
     enroll_group["credits"] = parse_credit(group["unitsMaximum"], group["unitsMinimum"])
     enroll_group["grading"] = group["gradingBasis"]
     enroll_group["components"] = group["componentsRequired"]
     if group["componentsOptional"]:
         enroll_group["componentsOptional"] = group["componentsOptional"]
-    enroll_group["instructors"] = [{"semester": semester, "netids": get_instructors(group, instructor_operations)}]
+    enroll_group["instructorHistory"] = [{"semester": semester, "instructors": get_instructors(group, instructor_operations)}]
     
     location_conflicts = get_location_conflicts(group)
     if location_conflicts:
@@ -428,11 +463,11 @@ def add_early_group_data(
         updated_group["grpSmst"].append(semester)
     
     # 2. Add instructors for the early semester
-    if "instructors" not in updated_group:
-        updated_group["instructors"] = {}
-    updated_group["instructors"].append({
+    if "instructorHistory" not in updated_group:
+        updated_group["instructorHistory"] = []
+    updated_group["instructorHistory"].append({
         "semester": semester, 
-        "netids" : get_instructors(early_semester_group_data)
+        "instructors": get_instructors(early_semester_group_data)
     })
     
     # 3. Add sections for the early semester
@@ -449,7 +484,7 @@ def get_group_identifier(group: Dict[str, Any]) -> tuple[str, bool]:
     """
     Get the identifier for an enrollment group based on priority rules:
     1. If any section has a topic, use that topic
-    2. If no topic and has IND section, use first instructor's last name
+    2. If no topic and has IND section, use first instructor's netid
     3. Otherwise, use first section's key
     
     Args:
@@ -465,14 +500,14 @@ def get_group_identifier(group: Dict[str, Any]) -> tuple[str, bool]:
         if section.get("topicDescription"):
             return section["topicDescription"], True
     
-    # Check for IND section and get first instructor's last name
+    # Check for IND section and get first instructor's netid
     for section in group.get("classSections", []):
         if section.get("ssrComponent") == "IND":
-            # Get first instructor's last name from any meeting
+            # Get first instructor's netid from any meeting
             for meeting in section.get("meetings", []):
                 for instructor in meeting.get("instructors", []):
-                    if instructor.get("lastName"):
-                        return instructor["lastName"], False
+                    if instructor.get("netid"):
+                        return instructor["netid"], False
     
     # Default to first section's key
     if group.get("classSections"):
@@ -483,18 +518,18 @@ def get_group_identifier(group: Dict[str, Any]) -> tuple[str, bool]:
     return "", False
 
 
-def get_instructors(group: Dict[str, Any], instructor_operations: List[UpdateOne] = None) -> List[str]:
+def get_instructors(group: Dict[str, Any], instructor_operations: List[UpdateOne] = None) -> List[Dict[str, Any]]:
     """
-    Extract instructor netids from an enrollment group.
+    Extract instructor data from an enrollment group.
     
     Args:
         group: The enrollment group dictionary from the API
         instructor_operations: List to collect instructor bulk operations
         
     Returns:
-        List of unique instructor netids
+        List of unique instructor data dictionaries
     """
-    instructors = set()
+    instructors = {}  # Use dict for deduplication since dicts aren't hashable
     
     # Iterate through all sections in the group
     for section in group.get("classSections", []):
@@ -503,11 +538,18 @@ def get_instructors(group: Dict[str, Any], instructor_operations: List[UpdateOne
             # Process each instructor in the meeting
             for instructor in meeting.get("instructors", []):
                 netid = instructor.get("netid")
-                if netid:  # Only add non-empty netids
+                if netid:  # Only process instructors with netids
+                    instructor_data = {
+                        "netid": netid,
+                        "lNm": instructor.get("lastName", ""),
+                        "fNm": instructor.get("firstName", ""),
+                        "mNm": instructor.get("middleName", "")
+                    }
                     if instructor_operations is not None:
-                        prepare_instructor_operation(instructor, instructor_operations)
-                    instructors.add(netid)
-    return list(instructors)
+                        prepare_instructor_operation(instructor_data, instructor_operations)
+                    instructors[netid] = instructor_data  # Use netid as key for deduplication
+    
+    return list(instructors.values())  # Return just the list of instructor data dictionaries
 
 
 def prepare_instructor_operation(instructor: Dict[str, Any], instructor_operations: List[UpdateOne]) -> None:
@@ -524,9 +566,9 @@ def prepare_instructor_operation(instructor: Dict[str, Any], instructor_operatio
         
     instructor_data = {
         "netid": netid,
-        "lNm": instructor.get("lastName", ""),
-        "fNm": instructor.get("firstName", ""),
-        "mNm": instructor.get("middleName", "")
+        "lNm": instructor.get("lNm", ""),
+        "fNm": instructor.get("fNm", ""),
+        "mNm": instructor.get("mNm", "")
     }
     
     # Use upsert to handle both insert and update cases
