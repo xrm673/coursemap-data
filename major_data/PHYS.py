@@ -10,24 +10,24 @@ def commit_PHYS():
         "needsCollege": False,
         "colleges": [{"collegeId": "CAS", "name": "College of Arts and Sciences"}],
         "numberOfRequiredCourses": None,
-        "rawBasicRequirements": [
+        "rawBasicSections": [
             {
-                "requirements": ["phys1", "phys2", "phys3", "phys4"],
+                "requirementIds": ["phys1", "phys2", "phys3", "phys4"],
             }
         ],
-        "concentrations": [
+        "rawConcentrations": [
             {
                 "concentrationName": "Physics (Inside) Concentration",
-                "requirements": ["phys5", "phys6","phys7"],
+                "requirementIds": ["phys5", "phys6","phys7"],
             },
             {
                 "concentrationName": "Outside Concentration",
-                "requirements": ["phys8"],
+                "requirementIds": ["phys8"],
             },
         ],
-        "endRequirements":[
+        "rawEndSections":[
             {
-                "requirements": ["phys9"]
+                "requirementIds": ["phys9"]
             }
         ],
         "onboardingCourses": ["PHYS1112","PHYS1116","PHYS2213","PHYS2217","PHYS2214","PHYS2218",
@@ -38,7 +38,7 @@ def commit_PHYS():
 
     req1 = {
         "_id": "phys1",
-        "type": "C",
+        "type": "group",
         "majorId": "PHYS",
         "name": "Intro Physics",
         "descr": [
@@ -47,9 +47,9 @@ def commit_PHYS():
         ],
         "numberOfRequiredCourses": 3,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["PHYS1116", "PHYS1112", "PHYS2207"]},
-            {"_id": 2, "courseIds": ["PHYS2217", "PHYS2213", "PHYS2208"]},
-            {"_id": 3, "courseIds": ["PHYS2218", "PHYS2214"]},
+            {"_id": 1, "topic": "Physics I", "courseIds": ["PHYS1116", "PHYS1112", "PHYS2207"]},
+            {"_id": 2, "topic": "Physics II", "courseIds": ["PHYS2217", "PHYS2213", "PHYS2208"]},
+            {"_id": 3, "topic": "Physics III", "courseIds": ["PHYS2218", "PHYS2214"]},
         ],
         "overlap": ["phys2", "phys3", "phys4", "phys5", "phys6", "phys7", "phys8", "phys9"],
         "note": "Students who take PHYS 1112 must either complete PHYS 2216 (1 cr) or take PHYS 1116 to learn Special Relativity.",
@@ -58,7 +58,7 @@ def commit_PHYS():
 
     req2 = {
         "_id": "phys2",
-        "type": "C",
+        "type": "group",
         "majorId": "PHYS",
         "name": "Math",
         "descr": [
@@ -66,10 +66,10 @@ def commit_PHYS():
         ],
         "numberOfRequiredCourses": 4,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["MATH1910","MATH1120"]},
-            {"_id": 2, "courseIds": ["MATH1920","MATH2220","MATH2130","MATH2240"]},
-            {"_id": 3, "courseIds": ["MATH2930","MATH3270"]},
-            {"_id": 4, "courseIds": ["MATH2940","MATH2210","MATH2310","MATH2230"]},
+            {"_id": 1, "topic": "Calculus", "courseIds": ["MATH1910","MATH1120"]},
+            {"_id": 2, "topic": "Multivariable Calculus", "courseIds": ["MATH1920","MATH2220","MATH2130","MATH2240"]},
+            {"_id": 3, "topic": "Differential Equations", "courseIds": ["MATH2930","MATH3270"]},
+            {"_id": 4, "topic": "Linear Algebra", "courseIds": ["MATH2940","MATH2210","MATH2310","MATH2230"]},
         ],
         "overlap": ["phys1", "phys3", "phys4", "phys5", "phys6", "phys7", "phys8", "phys9"],
         "note": None,
@@ -78,7 +78,7 @@ def commit_PHYS():
 
     req3 = {
         "_id": "phys3",
-        "type": "C",
+        "type": "group",
         "majorId": "PHYS",
         "name": "Quantum Mechanics",
         "descr": [
@@ -86,8 +86,8 @@ def commit_PHYS():
         ],
         "numberOfRequiredCourses": 2,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["PHYS3316"]},
-            {"_id": 2, "courseIds": ["PHYS3317"]},
+            {"_id": 1, "topic": "Basics", "courseIds": ["PHYS3316"]},
+            {"_id": 2, "topic": "Applications", "courseIds": ["PHYS3317"]},
         ],
         "overlap": ["phys1", "phys2", "phys4", "phys5", "phys6", "phys7", "phys8", "phys9"],
         "note": None,
@@ -96,15 +96,15 @@ def commit_PHYS():
 
     req4 = {
         "_id": "phys4",
-        "type": "C",
+        "type": "group",
         "majorId": "PHYS",
         "name": "Intermediate Physics",
         "descr": [
             "All physics majors must complete an intermediate classical mechanics course and an electromagnetism course.",
         ],
         "numberOfRequiredCourses": 2,
-        "courseGrps": [{"_id": 1, "courseIds": ["PHYS3318"]},
-                       {"_id": 2, "courseIds": ["PHYS3327"]}],
+        "courseGrps": [{"_id": 1, "topic": "Mechanics", "courseIds": ["PHYS3318"]},
+                       {"_id": 2, "topic": "Electromagnetism", "courseIds": ["PHYS3327"]}],
         "overlap": ["phys1", "phys2", "phys3", "phys5", "phys6", "phys7", "phys8", "phys9"],
         "note": None,
     }
@@ -112,7 +112,7 @@ def commit_PHYS():
 
     req5 = {
         "_id": "phys5",
-        "type": "C",
+        "type": "group",
         "majorId": "PHYS",
         "name": "Inside Concentration Core",
         "descr": [
@@ -135,7 +135,7 @@ def commit_PHYS():
     )
     req6 = {
         "_id": "phys6",
-        "type": "E",
+        "type": "list",
         "majorId": "PHYS",
         "name": "Inside Concentration Electives",
         "descr": [
@@ -160,7 +160,7 @@ def commit_PHYS():
     )
     req7 = {
         "_id": "phys7",
-        "type": "E",
+        "type": "list",
         "majorId": "PHYS",
         "name": "Inside Concentration Math",
         "descr": [
@@ -176,7 +176,7 @@ def commit_PHYS():
 
     req8 = {
         "_id": "phys8",
-        "type": "E",
+        "type": "list",
         "majorId": "PHYS",
         "name": "Outside Concentration",
         "descr": [
@@ -198,7 +198,7 @@ def commit_PHYS():
 
     req9 = {
         "_id": "phys9",
-        "type": "E",
+        "type": "list",
         "majorId": "PHYS",
         "name": "Lab",
         "descr": [

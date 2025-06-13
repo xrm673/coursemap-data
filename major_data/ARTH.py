@@ -9,9 +9,9 @@ def commit_ARTH():
         "needsCollege": False,
         "colleges": [{"collegeId": "CAS", "name": "College of Arts and Sciences"}],
         "numberOfRequiredCourses": 10,
-        "rawBasicRequirements": [
+        "rawBasicSections": [
             {
-                "requirements": [
+                "requirementIds": [
                     "arth1",
                     "arth2",
                     "arth3",
@@ -33,7 +33,7 @@ def commit_ARTH():
 
     req1 = {
         "_id": "arth1",
-        "type": "C",
+        "type": "group",
         "majorId": "ARTH",
         "name": "Core",
         "descr": [
@@ -44,9 +44,9 @@ def commit_ARTH():
         ],
         "numberOfRequiredCourses": 3,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["ARTH1100"]},
-            {"_id": 2, "courseIds": ["ARTH2000"]},
-            {"_id": 3, "courseIds": ["ARTH4101"]},
+            {"_id": 1, "topic": "Art History", "courseIds": ["ARTH1100"]},
+            {"_id": 2, "topic": "Visual Studies", "courseIds": ["ARTH2000"]},
+            {"_id": 3, "topic": "Methods Seminar", "courseIds": ["ARTH4101"]},
         ],
         "overlap": ["arth2", "arth3", "arth4", "arth5"],
     }
@@ -55,7 +55,7 @@ def commit_ARTH():
     req2_courses = get_courses_by_subject_level("ARTH", 2, excluded=["ARTH2000"])
     req2 = {
         "_id": "arth2",
-        "type": "E",
+        "type": "list",
         "majorId": "ARTH",
         "name": "2000-level",
         "descr": ["Take at least one ARTH course at the 2000-level."],
@@ -68,7 +68,7 @@ def commit_ARTH():
     req3_courses = get_courses_by_subject_level("ARTH", 3)
     req3 = {
         "_id": "arth3",
-        "type": "E",
+        "type": "list",
         "majorId": "ARTH",
         "name": "3000-level",
         "descr": ["Take at least one ARTH course at the 3000-level."],
@@ -81,7 +81,7 @@ def commit_ARTH():
     req4_courses = get_courses_by_subject_level("ARTH", 4, excluded=["ARTH4101"])
     req4 = {
         "_id": "arth4",
-        "type": "E",
+        "type": "list",
         "majorId": "ARTH",
         "name": "4000-level",
         "descr": ["Take at least two ARTH course at the 4000-level."],
@@ -96,7 +96,7 @@ def commit_ARTH():
     )
     req5 = {
         "_id": "arth5",
-        "type": "E",
+        "type": "list",
         "majorId": "ARTH",
         "name": "Electives",
         "descr": ["Take three additional ARTH electives at the 3000-level or higher."],

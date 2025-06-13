@@ -13,46 +13,46 @@ def commit_CS():
             {"collegeId": "COE", "name": "College of Engineering"},
         ],
         "numberOfRequiredCourses": None,
-        "rawBasicRequirements": [
+        "rawBasicSections": [
             {
                 "collegeId": "CAS",
                 "year": "2026",
-                "requirements": ["cs1", "cs2", "cs5", "cs7", "cs8", "cs9"],
+                "requirementsIds": ["cs1", "cs2", "cs5", "cs7", "cs8", "cs9"],
             },
             {
                 "collegeId": "CAS",
                 "year": "2027",
-                "requirements": ["cs1", "cs2", "cs5", "cs7", "cs8", "cs9"],
+                "requirementIds": ["cs1", "cs2", "cs5", "cs7", "cs8", "cs9"],
             },
             {
                 "collegeId": "CAS",
                 "year": "2028",
-                "requirements": ["cs1", "cs2", "cs4", "cs6", "cs9"],
+                "requirementIds": ["cs1", "cs2", "cs4", "cs6", "cs9"],
             },
             {
                 "collegeId": "CAS",
                 "year": "2029",
-                "requirements": ["cs1", "cs2", "cs4", "cs6", "cs9"],
+                "requirementIds": ["cs1", "cs2", "cs4", "cs6", "cs9"],
             },
             {
                 "collegeId": "COE",
                 "year": "2026",
-                "requirements": ["cs1", "cs3", "cs5", "cs7", "cs8", "cs9"],
+                "requirementIds": ["cs1", "cs3", "cs5", "cs7", "cs8", "cs9"],
             },
             {
                 "collegeId": "COE",
                 "year": "2027",
-                "requirements": ["cs1", "cs3", "cs5", "cs7", "cs8", "cs9"],
+                "requirementIds": ["cs1", "cs3", "cs5", "cs7", "cs8", "cs9"],
             },
             {
                 "collegeId": "COE",
                 "year": "2028",
-                "requirements": ["cs1", "cs3", "cs4", "cs6", "cs9"],
+                "requirementIds": ["cs1", "cs3", "cs4", "cs6", "cs9"],
             },
             {
                 "collegeId": "COE",
                 "year": "2029",
-                "requirements": ["cs1", "cs3", "cs4", "cs6", "cs9"],
+                "requirementIds": ["cs1", "cs3", "cs4", "cs6", "cs9"],
             },
         ],
         "onboardingCourses": [
@@ -71,7 +71,7 @@ def commit_CS():
 
     req1 = {
         "_id": "cs1",
-        "type": "C",
+        "type": "group",
         "majorId": "CS",
         "name": "Intro Programming",
         "descr": [
@@ -79,8 +79,8 @@ def commit_CS():
         ],
         "numberOfRequiredCourses": 2,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["CS1110", "CS1112"]},
-            {"_id": 2, "courseIds": ["CS2110", "CS2112"]},
+            {"_id": 1, "topic": "Intro Computing", "courseIds": ["CS1110", "CS1112"]},
+            {"_id": 2, "topic": "OOP & Data Structures", "courseIds": ["CS2110", "CS2112"]},
         ],
         "overlap": ["cs2", "cs3", "cs4", "cs5", "cs6", "cs7", "cs9"],
         "note": None,
@@ -90,7 +90,7 @@ def commit_CS():
     # math requirement for A&S students
     req2 = {
         "_id": "cs2",
-        "type": "C",
+        "type": "group",
         "majorId": "CS",
         "name": "Math",
         "descr": [
@@ -99,9 +99,9 @@ def commit_CS():
         ],
         "numberOfRequiredCourses": 3,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["MATH1110", "MATH1910"]},
-            {"_id": 2, "courseIds": ["MATH1120", "MATH1920"]},
-            {"_id": 3, "courseIds": ["MATH2210", "MATH2940"]},
+            {"_id": 1, "topic": "Basic Calculus", "courseIds": ["MATH1110", "MATH1910"]},
+            {"_id": 2, "topic": "Advanced Calculus", "courseIds": ["MATH1120", "MATH1920"]},
+            {"_id": 3, "topic": "Linear Algebra", "courseIds": ["MATH2210", "MATH2940"]},
         ],
         "overlap": ["cs1", "cs3", "cs4", "cs5", "cs6", "cs7", "cs9"],
         "note": None,
@@ -111,7 +111,7 @@ def commit_CS():
     # math requirement for Engineering students
     req3 = {
         "_id": "cs3",
-        "type": "C",
+        "type": "group",
         "majorId": "CS",
         "name": "Engineering Math",
         "descr": [
@@ -120,9 +120,9 @@ def commit_CS():
         ],
         "numberOfRequiredCourses": 3,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["MATH1910"]},
-            {"_id": 2, "courseIds": ["MATH1920"]},
-            {"_id": 3, "courseIds": ["MATH2940"]},
+            {"_id": 1, "topic": "Calculus", "courseIds": ["MATH1910"]},
+            {"_id": 2, "topic": "Multivariable Calculus", "courseIds": ["MATH1920"]},
+            {"_id": 3, "topic": "Linear Algebra", "courseIds": ["MATH2940"]},
         ],
         "overlap": ["cs1", "cs2", "cs4", "cs5", "cs6", "cs7", "cs9"],
         "note": None,
@@ -132,7 +132,7 @@ def commit_CS():
     # core requirement for 2028 and after-2028 students
     req4 = {
         "_id": "cs4",
-        "type": "C",
+        "type": "group",
         "majorId": "CS",
         "name": "Core",
         "descr": [
@@ -140,12 +140,12 @@ def commit_CS():
         ],
         "numberOfRequiredCourses": 6,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["CS2800", "CS2802"]},
-            {"_id": 2, "courseIds": ["CS3110"]},
-            {"_id": 3, "courseIds": ["CS3410", "CS3420"]},
-            {"_id": 4, "courseIds": ["CS3700", "CS3780"]},
-            {"_id": 5, "courseIds": ["CS4410", "CS4414"]},
-            {"_id": 6, "courseIds": ["CS4820"]},
+            {"_id": 1, "topic": "Math Foundations", "courseIds": ["CS2800", "CS2802"]},
+            {"_id": 2, "topic": "Data Struct & Functional Progr", "courseIds": ["CS3110"]},
+            {"_id": 3, "topic": "Computer Systems", "courseIds": ["CS3410", "CS3420"]},
+            {"_id": 4, "topic": "AI & Machine Learning", "courseIds": ["CS3700", "CS3780"]},
+            {"_id": 5, "topic": "Operating Systems", "courseIds": ["CS4410", "CS4414"]},
+            {"_id": 6, "topic": "Algorithms", "courseIds": ["CS4820"]},
         ],
         "overlap": ["cs1", "cs2", "cs3", "cs5", "cs6", "cs7", "cs9"],
         "note": None,
@@ -155,7 +155,7 @@ def commit_CS():
     # core requirement for 2027 and pre-2027 students
     req5 = {
         "_id": "cs5",
-        "type": "C",
+        "type": "group",
         "majorId": "CS",
         "name": "Core",
         "descr": [
@@ -163,11 +163,11 @@ def commit_CS():
         ],
         "numberOfRequiredCourses": 5,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["CS2800", "CS2802"]},
-            {"_id": 2, "courseIds": ["CS3110"]},
-            {"_id": 3, "courseIds": ["CS3410", "CS3420"]},
-            {"_id": 4, "courseIds": ["CS4410", "CS4414"]},
-            {"_id": 5, "courseIds": ["CS4820"]},
+            {"_id": 1, "topic": "Math Foundations", "courseIds": ["CS2800", "CS2802"]},
+            {"_id": 2, "topic": "Data Struct & Functional Progr", "courseIds": ["CS3110"]},
+            {"_id": 3, "topic": "Computer Systems", "courseIds": ["CS3410", "CS3420"]},
+            {"_id": 4, "topic": "Operating Systems", "courseIds": ["CS4410", "CS4414"]},
+            {"_id": 5, "topic": "Algorithms", "courseIds": ["CS4820"]},
         ],
         "overlap": ["cs1", "cs2", "cs3", "cs4", "cs6", "cs7", "cs9"],
         "note": None,
@@ -184,7 +184,7 @@ def commit_CS():
     )
     req6 = {
         "_id": "cs6",
-        "type": "E",
+        "type": "list",
         "majorId": "CS",
         "name": "Elective",
         "descr": [
@@ -208,7 +208,7 @@ def commit_CS():
     )
     req7 = {
         "_id": "cs7",
-        "type": "E",
+        "type": "list",
         "majorId": "CS",
         "name": "Electives",
         "descr": [
@@ -225,7 +225,7 @@ def commit_CS():
     # probability course for 2027 and pre-2027 students
     req8 = {
         "_id": "cs8",
-        "type": "E",
+        "type": "list",
         "majorId": "CS",
         "name": "Probability",
         "descr": [
@@ -244,7 +244,7 @@ def commit_CS():
                                               "CS5625", "CS5643"])
     req9 = {
         "_id": "cs9",
-        "type": "E",
+        "type": "list",
         "majorId": "CS",
         "name": "Practicum or Project",
         "descr": [

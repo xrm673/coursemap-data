@@ -13,48 +13,48 @@ def commit_INFO():
             {"collegeId": "CALS", "name": "College of Agriculture and Life Sciences"},
         ],
         "numberOfRequiredCourses": 15,
-        "rawBasicRequirements": [
+        "rawBasicSections": [
             {
-                "requirements": ["info1", "info2", "info3", "info4"],
+                "requirementIds": ["info1", "info2", "info3", "info4"],
             },
         ],
-        "concentrations": [
+        "rawConcentrations": [
             {
                 "concentrationName": "Behavioral Science",
-                "requirements": ["info6", "info7", "info8"],
+                "requirementIds": ["info6", "info7", "info8"],
             },
             {
                 "concentrationName": "Data Science",
-                "requirements": ["info9", "info10", "info11", "info12"],
+                "requirementIds": ["info9", "info10", "info11", "info12"],
             },
             {
                 "concentrationName": "Digital Culture and Production (Design Focused)",
-                "requirements": ["info13", "info14", "info15"],
+                "requirementIds": ["info13", "info14", "info15"],
             },
             {
                 "concentrationName": "Digital Culture and Production (Culture Focused)",
-                "requirements": ["info16", "info17"],
+                "requirementIds": ["info16", "info17"],
             },
             {
                 "concentrationName": "Information Ethics, Law, and Policy",
-                "requirements": ["info18", "info19", "info20", "info21"],
+                "requirementIds": ["info18", "info19", "info20", "info21"],
             },
             {
                 "concentrationName": "Interactive Technology",
-                "requirements": ["info22", "info23", "info24", "info25"],
+                "requirementIds": ["info22", "info23", "info24", "info25"],
             },
             {
                 "concentrationName": "Networks, Crowds, and Markets",
-                "requirements": ["info26", "info27", "info28"],
+                "requirementIds": ["info26", "info27", "info28"],
             },
             {
                 "concentrationName": "UX Design",
-                "requirements": ["info29", "info30", "info31", "info32"],
+                "requirementIds": ["info29", "info30", "info31", "info32"],
             },
         ],
-        "rawEndRequirements" : [
+        "rawEndSections" : [
             {
-                "requirements": ["info5"],
+                "requirementIds": ["info5"],
             },
         ],
         "onboardingCourses": [
@@ -72,19 +72,19 @@ def commit_INFO():
 
     req1 = {
         "_id": "info1",
-        "type": "C",
+        "type": "group",
         "majorId": "INFO",
         "name": "Core",
         "descr": [
-            "Information Science students must take at lease one course from each of the course group listed below.",
+            "Take at least one course from each of the course groups listed below.",
         ],
         "numberOfRequiredCourses": 5,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["INFO1200", "INFO1260"]},
-            {"_id": 2, "courseIds": ["INFO1300"]},
-            {"_id": 3, "courseIds": ["INFO2040"]},
-            {"_id": 4, "courseIds": ["INFO2450"]},
-            {"_id": 5, "courseIds": ["INFO2950", "INFO2951"]},
+            {"_id": 1, "topic": "Ethics & Law", "courseIds": ["INFO1200", "INFO1260"]},
+            {"_id": 2, "topic": "Web Programming", "courseIds": ["INFO1300"]},
+            {"_id": 3, "topic": "Networks", "courseIds": ["INFO2040"]},
+            {"_id": 4, "topic": "Communication & Tech", "courseIds": ["INFO2450"]},
+            {"_id": 5, "topic": "Data Science", "courseIds": ["INFO2950", "INFO2951"]},
         ],
         "overlap": ["info2", "info3", "info4", "info5", "info6", "info7",
                     "info8", "info9", "info10", "info11", "info12", "info13",
@@ -97,7 +97,7 @@ def commit_INFO():
 
     req2 = {
         "_id": "info2",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
         "name": "Programming",
         "descr": [
@@ -116,11 +116,11 @@ def commit_INFO():
 
     req3 = {
         "_id": "info3",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
         "name": "Math",
         "descr": [
-            "Take a Calculus I course (MATH 1106, MATH 1110, or MATH 1910) for letter grade to fulfill the math requirement. ",
+            "Take a Calculus I course for letter grade to fulfill the math requirement. ",
             "AP credits can fulfill this requirement.",
         ],
         "numberOfRequiredCourses": 1,
@@ -136,11 +136,11 @@ def commit_INFO():
 
     req4 = {
         "_id": "info4",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
         "name": "Statistics",
         "descr": [
-            "Take one of the statistics courses provided below. ",
+            "Take ONE statistics course provided below. ",
             "AP credits may NOT be used to fulfill this requirement.",
         ],
         "numberOfRequiredCourses": 1,
@@ -176,7 +176,7 @@ def commit_INFO():
     )
     req5 = {
         "_id": "info5",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
         "name": "Electives",
         "descr": [
@@ -201,10 +201,11 @@ def commit_INFO():
 
     req6 = {
         "_id": "info6",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Behavioral Science",
         "name": "Social Behavior",
-        "descr": ["Take two of the courses listed below."],
+        "descr": ["Take TWO courses listed below."],
         "numberOfRequiredCourses": 2,
         "courseIds": [
             "INFO3460",
@@ -231,11 +232,12 @@ def commit_INFO():
 
     req7 = {
         "_id": "info7",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Behavioral Science",
         "name": "Social Data Analytics",
         "descr": [
-            "Take one of the courses listed below",
+            "Take ONE course listed below",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -260,11 +262,12 @@ def commit_INFO():
 
     req8 = {
         "_id": "info8",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Behavioral Science",
         "name": "Behavior in Context",
         "descr": [
-            "Take one of the courses listed below.",
+            "Take ONE course listed below.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -294,12 +297,12 @@ def commit_INFO():
 
     req9 = {
         "_id": "info9",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Data Science",
         "name": "Data Analysis",
         "descr": [
-            "Consists of advanced courses in machine learning, data mining, and analytics across departments.",
-            "Take one of the courses listed below.",
+            "Take ONE course listed below.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -323,12 +326,12 @@ def commit_INFO():
 
     req10 = {
         "_id": "info10",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Data Science",
         "name": "Domain Expertise",
         "descr": [
-            "Features specialized courses applying data science across diverse fields including sustainability, language processing, and social science.",
-            "Take one of the courses listed below.",
+            "Take ONE course listed below.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -354,12 +357,12 @@ def commit_INFO():
 
     req11 = {
         "_id": "info11",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Data Science",
         "name": "Big Data Ethics, Policy and Society",
         "descr": [
-            "Includes courses examining the social, ethical, legal, and policy implications of data science and technology.",
-            "Take one of the courses listed below.",
+            "Take ONE course listed below.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -389,12 +392,12 @@ def commit_INFO():
 
     req12 = {
         "_id": "info12",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Data Science",
         "name": "Data Communication",
         "descr": [
-            "Covers courses in data visualization, information communication, and data-oriented research methods.",
-            "Take one of the courses listed below.",
+            "Take ONE course listed below.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -416,12 +419,12 @@ def commit_INFO():
 
     req13 = {
         "_id": "info13",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Digital Culture and Production (Design Focused)",
         "name": "Digital Culture and History",
         "descr": [
-            "You can choose to take 1 course in this section and 2 courses in the Design section."
-            "You can also choose to take 3 courses in this section and 0 course in the Design section."
+            "Choose either ONE course from this section, or choose THREE courses for a culture-focused curriculum."
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -444,10 +447,11 @@ def commit_INFO():
 
     req14 = {
         "_id": "info14",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Digital Culture and Production (Design Focused)",
         "name": "Digital Production",
-        "descr": ["Take one course in this section."],
+        "descr": ["Take ONE course in this section."],
         "numberOfRequiredCourses": 1,
         "courseIds": [
             "​INFO2300",
@@ -464,13 +468,13 @@ def commit_INFO():
 
     req15 = {
         "_id": "info15",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Digital Culture and Production (Design Focused)",
         "name": "Media, Art, Design",
         "descr": [
-            "Take two courses in this section.",
-            "You do not need to take course in this section if you plan to take three courses in the Digital Culture and History section.",
-        ],
+            "Choose either TWO courses from this section, or skip this section for a culture-focused curriculum.",
+            ],
         "numberOfRequiredCourses": 2,
         "courseIds": [
             "INFO3450",
@@ -497,12 +501,12 @@ def commit_INFO():
     
     req16 = {
         "_id": "info16",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Digital Culture and Production (Culture Focused)",
         "name": "Digital Culture and History",
         "descr": [
-            "You can choose to take 1 course in this section and 2 courses in the Design section."
-            "You can also choose to take 3 courses in this section and 0 course in the Design section."
+            "Choose either THREE courses from this section, or choose ONE course for a design-focused curriculum.",
         ],
         "numberOfRequiredCourses": 3,
         "courseIds": [
@@ -525,8 +529,9 @@ def commit_INFO():
     
     req17 = {
         "_id": "info17",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Digital Culture and Production (Culture Focused)",
         "name": "Digital Production",
         "descr": ["Take one course in this section."],
         "numberOfRequiredCourses": 1,
@@ -545,8 +550,9 @@ def commit_INFO():
 
     req18 = {
         "_id": "info18",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Information Ethics, Law, and Policy",
         "name": "Frameworks and Institutions",
         "descr": ["Take one course in this section."],
         "numberOfRequiredCourses": 1,
@@ -571,8 +577,9 @@ def commit_INFO():
 
     req19 = {
         "_id": "info19",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Information Ethics, Law, and Policy",
         "name": "Methods and Analysis",
         "descr": ["Take one course in this section."],
         "numberOfRequiredCourses": 1,
@@ -594,8 +601,9 @@ def commit_INFO():
 
     req20 = {
         "_id": "info20",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Information Ethics, Law, and Policy",
         "name": "Cases / Topics",
         "descr": ["Take one course in this section."],
         "numberOfRequiredCourses": 1,
@@ -618,8 +626,9 @@ def commit_INFO():
 
     req21 = {
         "_id": "info21",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Information Ethics, Law, and Policy",
         "name": "Tools and Technical Domains",
         "descr": [
             "Take one course in this section.",
@@ -641,8 +650,9 @@ def commit_INFO():
 
     req22 = {
         "_id": "info22",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Interactive Technology",
         "name": "Object-Oriented Programming",
         "descr": [
             "CS 2110 is a required course for this concentration.",
@@ -655,11 +665,12 @@ def commit_INFO():
 
     req23 = {
         "_id": "info23",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Interactive Technology",
         "name": "Building with Hardware",
         "descr": [
-            "Take one of the three courses for this requirement.",
+            "Take ONE course for this requirement.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": ["INFO4120", "INFO4320", "CS4758"],
@@ -669,11 +680,12 @@ def commit_INFO():
 
     req24 = {
         "_id": "info24",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Interactive Technology",
         "name": "Working with Data/Software",
         "descr": [
-            "Take one of the courses for this requirement.",
+            "Take ONE course for this requirement.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -694,11 +706,12 @@ def commit_INFO():
 
     req25 = {
         "_id": "info25",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Interactive Technology",
         "name": "Context/Application Domains",
         "descr": [
-            "Take one of the courses for this requirement.",
+            "Take ONE course for this requirement.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -719,11 +732,12 @@ def commit_INFO():
     
     req26 = {
         "_id": "info26",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Networks, Crowds, and Markets",
         "name": "Models",
         "descr": [
-            "Take two of the courses for this requirement.",
+            "Take TWO courses for this requirement.",
         ],
         "numberOfRequiredCourses": 2,
         "courseIds": [
@@ -748,11 +762,12 @@ def commit_INFO():
     
     req27 = {
         "_id": "info27",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Networks, Crowds, and Markets",
         "name": "Data",
         "descr": [
-            "Take one of the courses for this requirement.",
+            "Take ONE course for this requirement.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -776,11 +791,12 @@ def commit_INFO():
     
     req28 = {
         "_id": "info28",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "Networks, Crowds, and Markets",
         "name": "Policy / Values",
         "descr": [
-            "Take one of the courses for this requirement.",
+            "Take ONE course for this requirement.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -811,11 +827,12 @@ def commit_INFO():
 
     req29 = {
         "_id": "info29",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "UX Design",
         "name": "Core Principles of Design",
         "descr": [
-            "Take one of the courses for this requirement.",
+            "Take ONE course for this requirement.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -834,11 +851,12 @@ def commit_INFO():
 
     req30 = {
         "_id": "info30",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "UX Design",
         "name": "Design in Context",
         "descr": [
-            "Take one of the courses for this requirement.",
+            "Take ONE course for this requirement.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": ["INFO2921", "INFO4240", "INFO4420", "INFO4505", "INFO4940"],
@@ -855,11 +873,12 @@ def commit_INFO():
 
     req31 = {
         "_id": "info31",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "UX Design",
         "name": "Knowing the User",
         "descr": [
-            "Take one of the courses for this requirement.",
+            "Take ONE course for this requirement.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [
@@ -876,11 +895,12 @@ def commit_INFO():
 
     req32 = {
         "_id": "info32",
-        "type": "E",
+        "type": "list",
         "majorId": "INFO",
+        "concentrationName": "UX Design",
         "name": "Knowing the Technology",
         "descr": [
-            "Take one of the courses for this requirement.",
+            "Take ONE course for this requirement.",
         ],
         "numberOfRequiredCourses": 1,
         "courseIds": [

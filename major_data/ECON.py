@@ -12,9 +12,9 @@ def commit_ECON():
             {"collegeId": "CAS", "name": "College of Arts and Sciences"},
         ],
         "numberOfRequiredCourses": 10,
-        "rawBasicRequirements": [
+        "rawBasicSections": [
             {
-                "requirements": ["econ1", "econ2", "econ3"],
+                "requirementIds": ["econ1", "econ2", "econ3"],
             }
         ],
         "onboardingCourses": [
@@ -33,7 +33,7 @@ def commit_ECON():
 
     req1 = {
         "_id": "econ1",
-        "type": "C",
+        "type": "group",
         "majorId": "ECON",
         "name": "Basic",
         "descr": [
@@ -41,9 +41,9 @@ def commit_ECON():
         ],
         "numberOfRequiredCourses": 3,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["ECON1110"]},
-            {"_id": 2, "courseIds": ["ECON1120"]},
-            {"_id": 3, "courseIds": ["MATH1110"]},
+            {"_id": 1, "topic": "Micro", "courseIds": ["ECON1110"]},
+            {"_id": 2, "topic": "Macro", "courseIds": ["ECON1120"]},
+            {"_id": 3, "topic": "Math", "courseIds": ["MATH1110"]},
         ],
         "overlap": ["econ2", "econ3"],
         "note": None,
@@ -52,7 +52,7 @@ def commit_ECON():
     
     req2 = {
         "_id": "econ2",
-        "type": "C",
+        "type": "group",
         "majorId": "ECON",
         "name": "Core",
         "descr": [
@@ -60,10 +60,10 @@ def commit_ECON():
         ],
         "numberOfRequiredCourses": 4,
         "courseGrps": [
-            {"_id": 1, "courseIds": ["ECON3030"]},
-            {"_id": 2, "courseIds": ["ECON3040"]},
-            {"_id": 3, "courseIds": ["ECON3110", "ECON3130"]},
-            {"_id": 4, "courseIds": ["ECON3120", "ECON3140"]},
+            {"_id": 1, "topic": "Intermed Micro", "courseIds": ["ECON3030"]},
+            {"_id": 2, "topic": "Intermed Macro", "courseIds": ["ECON3040"]},
+            {"_id": 3, "topic": "Statistics", "courseIds": ["ECON3110", "ECON3130"]},
+            {"_id": 4, "topic": "Econometrics", "courseIds": ["ECON3120", "ECON3140"]},
         ],
         "overlap": ["econ1", "econ3"],
         "note": None,
@@ -78,7 +78,7 @@ def commit_ECON():
     )
     req3 = {
         "_id": "econ3",
-        "type": "E",
+        "type": "list",
         "majorId": "ECON",
         "name": "Elective",
         "descr": [
