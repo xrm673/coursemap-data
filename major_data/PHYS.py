@@ -7,9 +7,9 @@ def commit_PHYS():
         "_id": "PHYS",
         "name": "Physics",
         "type": "major",
-        "needsYear": False,
-        "needsMajor": False,
-        "needsCollege": False,
+        "yearDependent": False,
+        "majorDependent": False,
+        "collegeDependent": False,
         "colleges": [{"collegeId": "CAS", "name": "College of Arts and Sciences"}],
         "numberOfRequiredCourses": None,
         "rawBasicSections": [

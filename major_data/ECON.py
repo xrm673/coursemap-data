@@ -7,9 +7,9 @@ def commit_ECON():
         "_id": "ECON",
         "name": "Economics",
         "type": "major",
-        "needsYear": False,
-        "needsMajor": False,
-        "needsCollege": False,
+        "yearDependent": False,
+        "majorDependent": False,
+        "collegeDependent": False,
         "colleges": [
             {"collegeId": "CAS", "name": "College of Arts and Sciences"},
         ],

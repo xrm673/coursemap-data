@@ -5,9 +5,9 @@ def commit_COE():
         "_id": "COE",
         "name": "College of Engineering",
         "type": "college",
-        "needsYear": False,
-        "needsMajor": False,
-        "needsCollege": False,
+        "yearDependent": False,
+        "majorDependent": False,
+        "collegeDependent": False,
         "rawBasicSections": [],
         "majors": [
             {

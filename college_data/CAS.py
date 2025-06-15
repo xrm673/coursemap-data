@@ -5,9 +5,9 @@ def commit_CAS():
         "_id": "CAS",
         "name": "College of Arts and Sciences",
         "type": "college",
-        "needsYear": False,
-        "needsMajor": False,
-        "needsCollege": False,
+        "yearDependent": False,
+        "majorDependent": False,
+        "collegeDependent": False,
         "rawBasicSections": [],
         "majors": [
         {

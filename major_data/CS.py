@@ -7,9 +7,9 @@ def commit_CS():
         "_id": "CS",
         "name": "Computer Science",
         "type": "major",
-        "needsYear": True,
-        "needsMajor": False,
-        "needsCollege": True,
+        "yearDependent": True,
+        "majorDependent": False,
+        "collegeDependent": True,
         "colleges": [
             {"collegeId": "CAS", "name": "College of Arts and Sciences"},
             {"collegeId": "COE", "name": "College of Engineering"},

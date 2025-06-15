@@ -7,9 +7,9 @@ def commit_INFO():
         "_id": "INFO",
         "name": "Information Science",
         "type": "major",
-        "needsYear": False,
-        "needsMajor": False,
-        "needsCollege": False,
+        "yearDependent": False,
+        "majorDependent": False,
+        "collegeDependent": False,
         "colleges": [
             {"collegeId": "CAS", "name": "College of Arts and Sciences"},
             {"collegeId": "CALS", "name": "College of Agriculture and Life Sciences"},
