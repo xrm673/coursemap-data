@@ -5,7 +5,9 @@ def commit_ARTH():
     major = {
         "_id": "ARTH",
         "name": "History of Art",
+        "type": "major",
         "needsYear": False,
+        "needsMajor": False,
         "needsCollege": False,
         "colleges": [{"collegeId": "CAS", "name": "College of Arts and Sciences"}],
         "numberOfRequiredCourses": 10,

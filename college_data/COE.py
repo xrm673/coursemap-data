@@ -4,6 +4,11 @@ def commit_COE():
     college = {
         "_id": "COE",
         "name": "College of Engineering",
+        "type": "college",
+        "needsYear": False,
+        "needsMajor": False,
+        "needsCollege": False,
+        "rawBasicSections": [],
         "majors": [
             {
                 "majorId": "CS",

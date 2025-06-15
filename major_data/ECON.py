@@ -6,7 +6,9 @@ def commit_ECON():
     major = {
         "_id": "ECON",
         "name": "Economics",
+        "type": "major",
         "needsYear": False,
+        "needsMajor": False,
         "needsCollege": False,
         "colleges": [
             {"collegeId": "CAS", "name": "College of Arts and Sciences"},

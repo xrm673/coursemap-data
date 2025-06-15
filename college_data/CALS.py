@@ -4,6 +4,11 @@ def commit_CALS():
     college = {
         "_id": "CALS",
         "name": "College of Agriculture and Life Sciences",
+        "type": "college",
+        "needsYear": False,
+        "needsMajor": False,
+        "needsCollege": False,
+        "rawBasicSections": [],
         "majors": [
             {
                 "majorId": "INFO",

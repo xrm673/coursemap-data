@@ -6,7 +6,9 @@ def commit_CS():
     major = {
         "_id": "CS",
         "name": "Computer Science",
+        "type": "major",
         "needsYear": True,
+        "needsMajor": False,
         "needsCollege": True,
         "colleges": [
             {"collegeId": "CAS", "name": "College of Arts and Sciences"},
